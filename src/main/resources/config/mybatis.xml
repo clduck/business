@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+<configuration>
+ <!-- 配置全局变量时，有顺序要求，properties 必须在前面 -->
+ <properties>
+	<property name="dialect" value="mysql"/>
+  </properties>
+  <settings>
+   <setting name="lazyLoadingEnabled" value="false" />
+  </settings>
+  <typeAliases>
+     <!--   -->
+      <typeAlias alias="UserInfo" type="com.business.model.UserInfo"/>
+      <typeAlias alias="menuInfo" type="com.business.model.MenuInfo"/>
+      <typeAlias alias="aboutInfo" type="com.business.model.AboutInfo"/>
+      <typeAlias alias="memGroup" type="com.business.model.MemGroup"/>
+      <typeAlias alias="newsInfo" type="com.business.model.NewsInfo"/>
+      <typeAlias alias="newsType" type="com.business.model.NewsType"/>
+      <typeAlias alias="productInfo" type="com.business.model.ProductInfo"/>
+      <typeAlias alias="productParam" type="com.business.model.param.ProductParam"/>
+      <typeAlias alias="productType" type="com.business.model.ProductType"/>
+      <typeAlias alias="downloadInfo" type="com.business.model.DownloadInfo"/>
+      <typeAlias alias="downloadParam" type="com.business.model.param.ProductParam"/>
+      <typeAlias alias="downloadType" type="com.business.model.DownloadType"/>
+      <typeAlias alias="jobInfo" type="com.business.model.JobInfo"/>
+      <typeAlias alias="jobInfoParam" type="com.business.model.param.JobInfoParam"/>
+      <typeAlias alias="Wch" type="com.business.model.Wch"/>
+      
+      
+  </typeAliases>
+  <plugins>
+		<plugin interceptor="com.business.mybatis.interceptor.PaginationInterceptor">
+		</plugin>
+  </plugins>
+</configuration>

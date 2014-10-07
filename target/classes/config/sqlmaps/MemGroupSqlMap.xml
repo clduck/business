@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.business.model.MemGroup">
+
+   <!-- 查询用户信息 -->
+   <resultMap id="memGroupMap" type="memGroup" >
+      <result property="Id" column="ID" javaType="int"/>
+      <result property="groupId" column="GroupId" javaType="String"/>
+      <result property="groupName" column="GroupName" javaType="String"/>
+      <result property="groupLevel" column="GroupLevel" javaType="int"/>
+      <result property="explain" column="Explain" javaType="String"/>
+      <result property="addTime" column="AddTime" javaType="String"/>
+   </resultMap>
+   <!-- 获取企业详细信息 -->
+   <select id="queryAboutInfo" resultMap="memGroupMap" parameterType="memGroup">
+     <![CDATA[
+        select t.* from business_memgroup t 
+     ]]>
+      where 1=1
+      <include refid="querywhereClause"/>
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+       <if test="Id != null">
+           and t.ID = #{Id}
+        </if>
+        <if test="groupId != null">
+           and t.GroupId = #{groupId}
+        </if>
+        <if test="groupName != null">
+           and t.GroupName = #{groupName}
+        </if>
+        <if test="groupLevel != null">
+           and t.GroupLevel = #{groupLevel}
+        </if>
+        <if test="explain != null">
+            and t.Explain = #{explain}
+        </if>
+        <if test="addTime != null">
+            and t.AddTime = #{addTime}
+        </if>
+   </sql>
+</mapper>

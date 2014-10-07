@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.cn.duck.model.NewsInfo">
+
+   <!-- 查询用户信息 -->
+   <resultMap id="newsInfoMap" type="newsInfo" >
+      <result property="newsID" column="ID" javaType="int"/>
+      <result property="newsName" column="NewsName" javaType="String"/>
+      <result property="viewFlag" column="ViewFlag" javaType="int"/>
+      <result property="sortID" column="SortID" javaType="int"/>
+      <result property="sortPath" column="SortPath" javaType="String"/>
+      <result property="groupID" column="GroupID" javaType="String"/>
+      <result property="exclusive" column="Exclusive" javaType="String"/>
+      <result property="noticeFlag" column="NoticeFlag" javaType="int"/>
+      <result property="source" column="Source" javaType="String"/>
+      <result property="content" column="Content" javaType="String"/>
+      <result property="clickNumber" column="ClickNumber" javaType="int"/>
+      <result property="addTimeStr" column="AddTime" javaType="String"/>
+      <result property="pictureFlag" column="PictureFlag" javaType="int"/>
+      <result property="pictures" column="Pictures" javaType="String"/>
+      <result property="seoKeywords" column="SeoKeywords" javaType="String"/>
+      <result property="seoDescription" column="SeoDescription" javaType="String"/>
+      <result property="status" column="status" javaType="int"/>
+      
+   </resultMap>
+   
+   <!-- 获取新闻信息总数 -->
+   <select id="queryNewsCount" resultType="int">
+     <![CDATA[
+        select count(*) from business_news 
+     ]]>
+      where 1=1 and status = 0
+   </select>
+   <!-- 获取企业信息-分页 -->
+    <select id="queryNews"  resultType="newsInfo">
+      
+      <![CDATA[
+      SELECT
+		t.ID as newsID,t.NewsName,t.ViewFlag,t.SortID,t.SortPath,s.GroupName as groupID,t.Exclusive,t.NoticeFlag,
+		t.ClickNumber,date_format( t.addTime,'%Y-%m-%d  %H:%i:%s')  as addtimeStr
+		from  business_news t left join business_memgroup s on t.groupID = s.groupID
+	  ]]>
+	  where 1=1  and t.status = 0 order by  t.addTime
+   </select>
+  
+   <!-- 获取新闻详细信息 -->
+   <select id="queryNewsInfo" resultMap="newsInfoMap" parameterType="newsInfo">
+     <![CDATA[
+        select t.*,s.sortName from business_news t ,business_newssort s
+     ]]>
+      where 1=1 and t.sortID = s.ID
+      <include refid="querywhereClause"/>
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+      <if test=" newsID != null">
+         and t.ID = #{newsID}
+      </if>
+   </sql>
+   <!-- 插入新闻信息记录 -->
+   <insert id="insertNewsInfo" parameterType="newsInfo">
+      <![CDATA[
+         insert into business_news (NewsName,ViewFlag,SortID,SortPath,GroupID,Exclusive,NoticeFlag,Source,Content,ClickNumber,AddTime,PictureFlag,Pictures,SeoKeywords,SeoDescription,Status)
+                              values(#{newsName},#{viewFlag},#{sortID},#{sortPath},#{groupID},#{exclusive},#{noticeFlag},#{source},#{content},#{clickNumber},#{addTime},#{pictureFlag},#{pictures},#{seoKeywords},#{seoDescription},#{status})
+      ]]>
+   </insert>
+   
+   <!-- 修改企业信息 -->
+   <update id="modifyNewsInfo" parameterType="newsInfo">
+          update business_news set
+           <trim prefix="set" suffixOverrides=","></trim>
+           <if test="newsName != null">NewsName = #{newsName}, </if>
+           <if test="viewFlag != null">ViewFlag  = #{viewFlag},</if>
+           <if test="content != null">Content   = #{content},</if>
+           <if test="groupID != null">GroupID     = #{groupID},</if>
+           <if test="exclusive != null">Exclusive   = #{exclusive},</if>
+           <if test="noticeFlag != null">NoticeFlag   = #{noticeFlag},</if>
+           <if test="source != null">Source   = #{source},</if>
+           <if test="pictureFlag != null">PictureFlag   = #{pictureFlag},</if>
+           <if test="pictures != null">Pictures  = #{pictures},</if>
+           <if test="sortID != null">sortID  = #{sortID},</if>
+           <if test="seoKeywords != null">SeoKeywords   = #{seoKeywords},</if>
+           <if test="seoDescription != null">SeoDescription   = #{seoDescription}</if>
+           where 1=1 and ID = #{newsID}
+   </update>
+   <!-- 删除新闻信息 -->
+   <delete id="deleteNewsInfos">
+        update business_news set status = 1 where ID in 
+        <foreach item="newsInfoIds" collection="list"
+         open="(" separator="," close=")">
+         #{newsInfoIds}
+        </foreach>
+   </delete>
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.cn.duck.model.JobInfo">
+
+   <!-- 查询用户信息 -->
+   <resultMap id="jobInfoMap" type="jobInfo" >
+      <result property="jobID" column="ID" javaType="int"/>
+      <result property="jobName" column="JobName" javaType="String"/>
+      <result property="viewFlag" column="ViewFlag" javaType="int"/>
+      <result property="jobAddress" column="jobAddress" javaType="String"/>
+      <result property="pay" column="pay" javaType="String"/>
+      <result property="jobNumber" column="jobNumber" javaType="int"/>
+      <result property="responsibility" column="responsibility" javaType="String"/>
+      <result property="requirement" column="requirement" javaType="String"/>
+      <result property="startDate" column="startDate" javaType="Date"/>
+      <result property="endDate" column="endDate" javaType="Date"/>
+      <result property="clickNumber" column="clickNumber" javaType="int"/>
+      <result property="addTime" column="addTime" javaType="Date"/>
+      <result property="updateTime" column="updateTime" javaType="Date"/>
+      <result property="employer" column="employer" javaType="String"/>
+      <result property="apply" column="apply" javaType="int"/>
+      <result property="contact" column="contact" javaType="String"/>
+      <result property="tel" column="tel" javaType="String"/>
+      <result property="address" column="address" javaType="String"/>
+      <result property="postCode" column="postCode" javaType="String"/>
+      <result property="email" column="email" javaType="String"/>
+      <result property="status" column="status" javaType="int"/>
+   </resultMap>
+   
+   <!-- 获取招聘信息总数 -->
+   <select id="queryJobCount" resultType="int">
+     <![CDATA[
+        select count(1) from business_job t
+     ]]>
+      where 1=1 and t.status = 0  
+      <include refid="queryForJobList"/>
+   </select>
+   <!-- 获取企业信息-分页 -->
+    <select id="queryJob"  resultType="jobInfo">
+      
+      <![CDATA[
+      SELECT
+		t.ID as jobID,t.JobName,t.ViewFlag,t.ClickNumber, t.updateTime,t.jobNumber,t.clickNumber,t.apply,t.endDate,t.addTime
+		from  business_job t
+	  ]]>
+	  where 1=1  and t.status = 0 
+	  <include refid="queryForJobList"/>
+	  order by  t.endDate
+   </select>
+   <!-- 查询下载列表条件 -->
+   <sql id="queryForJobList">
+	    <if test="startTime != null " >  and date_format(t.addTime,'%Y%m%d') >= #{startTime} </if>
+        <if test="endTime != null " >  <![CDATA[and  date_format( t.addTime,'%Y%m%d') <= #{endTime}  ]]></if>
+        <if test="jobName != null" > and t.jobName like CONCAT('%','${jobName}','%' )</if>
+   </sql>
+   <!-- 获取招聘详细信息 -->
+   <select id="queryJobInfo" resultMap="jobInfoMap" parameterType="jobInfo">
+     <![CDATA[
+        select t.* from business_job t 
+     ]]>
+      where 1=1 
+      <include refid="querywhereClause"/>
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+      <if test=" jobID != null">
+         and t.ID = #{jobID}
+      </if>
+   </sql>
+   <!-- 插入招聘信息记录 -->
+   <insert id="insertJobInfo" parameterType="jobInfo">
+      <![CDATA[
+         insert into business_job (jobName,viewFlag,jobAddress,pay,jobNumber,responsibility,requirement,startDate,endDate,clickNumber,addTime,updateTime,employer,apply,contact,tel,address,postCode,email,status)
+                           values(#{jobName},#{viewFlag},#{jobAddress},#{pay},#{jobNumber},#{responsibility},#{requirement},#{startDate},#{endDate},#{clickNumber},#{addTime},#{updateTime},#{employer},#{apply},#{contact},#{tel},#{address},#{postCode},#{email},#{status})
+      ]]>
+   </insert>
+   
+   <!-- 修改招聘信息 -->
+   <update id="modifyJobInfo" parameterType="jobInfo">
+          update business_job set updateTime   = #{updateTime}
+           <trim prefix="set" suffixOverrides=","></trim>
+           <if test="jobName != null">,JobName = #{jobName} </if>
+           <if test="viewFlag != null">,ViewFlag  = #{viewFlag}</if>
+           <if test="jobAddress != null">,jobAddress   = #{jobAddress}</if>
+           <if test="pay != null">,pay     = #{pay}</if>
+           <if test="jobNumber != null">,jobNumber   = #{jobNumber}</if>
+           <if test="responsibility != null">,responsibility   = #{responsibility}</if>
+           <if test="requirement != null">,requirement   = #{requirement}</if>
+           <if test="startDate != null">,startDate   = #{startDate}</if>
+           <if test="endDate != null">,endDate  = #{endDate}</if>
+           <if test="clickNumber != null">,clickNumber  = #{clickNumber}</if>
+           <if test="employer != null">,employer   = #{employer}</if>
+           <if test="apply != null">,apply   = #{apply}</if>
+           <if test="contact != null">,contact   = #{contact}</if>
+           <if test="tel != null">,tel   = #{tel}</if>
+           <if test="address != null">,address   = #{address}</if>
+           <if test="postCode != null">,postCode   = #{postCode}</if>
+           <if test="email != null">,email   = #{email}</if>
+           <if test="status != null">,status   = #{status}</if>
+           where 1=1 and ID = #{jobID}
+   </update>
+   <!-- 删除招聘信息 -->
+   <delete id="deleteJobInfos">
+        update business_job set status = 1 where ID in 
+        <foreach item="jobInfoIds" collection="list"
+         open="(" separator="," close=")">
+         #{jobInfoIds}
+        </foreach>
+   </delete>
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.business.model.AboutInfo">
+
+   <!-- 查询用户信息 -->
+   <resultMap id="AboutInfoMap" type="AboutInfo" >
+      <result property="aboutID" column="ID" javaType="int"/>
+      <result property="aboutName" column="AboutNameCh" javaType="String"/>
+      <result property="viewFlag" column="ViewFlagCh" javaType="int"/>
+      <result property="content" column="ContentCh" javaType="String"/>
+      <result property="clickNumber" column="ClickNumber" javaType="int"/>
+      <result property="sequence" column="Sequence" javaType="int"/>
+      <result property="groupID" column="GroupID" javaType="String"/>
+      <result property="exclusive" column="Exclusive" javaType="String"/>
+      <result property="childFlag" column="ChildFlag" javaType="int"/>
+      <result property="addTimeStr" column="AddTime" javaType="String"/>
+      <result property="updateTimeStr" column="UpdateTime" javaType="String"/>
+      <result property="status" column="status" javaType="int"/>
+      
+   </resultMap>
+   
+   <!-- 获取企业信息总数 -->
+   <select id="queryAboutCount" resultType="int">
+     <![CDATA[
+        select count(*) from business_about 
+     ]]>
+      where 1=1 and status = 0
+   </select>
+   <!-- 获取企业信息-分页 -->
+    <select id="queryAbouts"  resultType="AboutInfo">
+     <![CDATA[
+        select t.ID as aboutID, 
+               t.aboutName,t.viewFlag,t.clickNumber,t.sequence,s.GroupName as groupID,t.exclusive,
+               date_format( t.addTime,'%Y-%m-%d  %H:%i:%s')  as addTimeStr,
+               date_format( t.updateTime,'%Y-%m-%d  %H:%i:%s') as updateTimeStr
+        from  business_about t left join business_memgroup s on t.groupID = s.groupID
+     ]]>
+      where 1=1  and t.status = 0 order by t.Sequence
+   </select>
+  
+   <!-- 获取企业详细信息 -->
+   <select id="queryAboutInfo" resultMap="AboutInfoMap" parameterType="aboutInfo">
+     <![CDATA[
+        select t.* from business_about t 
+     ]]>
+      where 1=1
+      <include refid="querywhereClause"/>
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+      <if test=" aboutID != null">
+         and t.ID = #{aboutID}
+      </if>
+   </sql>
+   <!-- 插入企业信息记录 -->
+   <insert id="insertAboutInfo" parameterType="aboutInfo">
+      <![CDATA[
+         insert into business_about (AboutName,ViewFlag,Content,ClickNumber,Sequence,GroupID,Exclusive,ChildFlag,AddTime,UpdateTime,ParentID,SortPath,status)
+                              values(#{aboutName},#{viewFlag},#{content},#{clickNumber},#{sequence},#{groupID},#{exclusive},#{childFlag},#{addTime},#{updateTime},#{parentID},#{sortPath},#{status})
+      ]]>
+   </insert>
+   
+   <!-- 修改企业信息 -->
+   <update id="modifyAboutInfo" parameterType="aboutInfo">
+          update business_about set UpdateTime  = #{updateTime}
+           <if test="aboutName != null">,AboutName = #{aboutName} </if>
+           <if test="viewFlag != null">,ViewFlag  = #{viewFlag}</if>
+           <if test="content != null">,Content   = #{content}</if>
+           <if test="sequence != null">,Sequence    = #{sequence}</if>
+           <if test="groupID != null">,GroupID     = #{groupID}</if>
+           <if test="exclusive != null">,Exclusive   = #{exclusive}</if>
+           <if test="childFlag != null">,ChildFlag   = #{childFlag}</if>
+           <if test="parentID != null">,ParentID    = #{parentID}</if>
+           <if test="status != null">,status      = #{status}</if>
+           where 1=1 and ID = #{aboutID}
+   </update>
+   <!-- 删除企业信息 -->
+   <delete id="deleteAboutInfos">
+        update business_about set status = 1 where ID in 
+        <foreach item="aboutInfoIds" collection="list"
+         open="(" separator="," close=")">
+         #{aboutInfoIds}
+        </foreach>
+   </delete>
+</mapper>

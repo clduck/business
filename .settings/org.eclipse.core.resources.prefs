@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/main/resources/config/dataBase.properties=UTF-8
+encoding//src/main/webapp/WEB-INF/aboutInfo/aboutInfo_main.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/system/blue1_accordion/left.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/system/blue1_accordion/main.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/system/blue1_accordion/open.jsp=UTF-8
+encoding//src/main/webapp/manage/accordion/index_inc.jsp=UTF-8
+encoding//src/test/java=UTF-8
+encoding/<project>=UTF-8

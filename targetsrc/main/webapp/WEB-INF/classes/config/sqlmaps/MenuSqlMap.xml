@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.cn.duck.model.MenuInfo">
+
+   <!-- 查询用户信息 -->
+   <resultMap id="menuInfoMap" type="MenuInfo" >
+      <result property="menuID" column="menuID" javaType="int"/>
+      <result property="menuName" column="menuName" javaType="String"/>
+      <result property="menuType" column="menuType" javaType="int"/>
+      <result property="superMenu" column="superMenu" javaType="int"/>
+      <result property="menuStatus" column="menuStatus" javaType="int"/>
+      <result property="menuUrl" column="menuUrl" javaType="String"/>
+      <result property="description" column="description" javaType="String"/>
+   </resultMap>
+   <select id="queryMenuInfo" resultMap="menuInfoMap" parameterType="menuInfo">
+     <![CDATA[
+        select t.* from business_menu t 
+     ]]>
+      where 1=1 
+      <include refid="querywhereClause"/>
+   </select>
+   
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+        <if test=" menuID != null">
+           and t.menuID = #{menuID}
+        </if>
+        <if test="menuType != null">
+           and t.menuType = #{menuType}
+        </if>
+        <if test="menuName != null">
+           and t.menuName = #{menuName}
+        </if>
+        <if test="superMenu != null">
+           and t.superMenu = #{superMenu}
+        </if>
+        <if test="menuStatus != null">
+           and t.menuStatus = #{menuStatus}
+        </if>
+        <if test="menuUrl != null">
+            and t.menuUrl = #{menuUrl}
+        </if>
+        <if test="description != null">
+            and t.description = #{description}
+        </if>
+   </sql>
+   
+   
+</mapper>

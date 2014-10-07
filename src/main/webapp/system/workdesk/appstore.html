@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<!--框架必需start-->
+<script type="text/javascript" src="../../libs/js/jquery.js"></script>
+<script type="text/javascript" src="../../libs/js/framework.js"></script>
+<link href="../../libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+<link rel="stylesheet" type="text/css" id="customSkin"/>
+<!--框架必需end-->
+<script>
+	$(function(){
+		var appstoreList={"list":[{id:"app1",name:"应用1",link:"../../sample_skin/normal/form-pop-content1.html",icon:"skin/newicons/demo53.png"},
+					{id:"app2",name:"应用2",link:"../../sample_skin/normal/grid-pop-content1.html",icon:"skin/newicons/demo52.png"},
+					{id:"app3",name:"应用3",link:"../../sample_skin/normal/layout-box-content1.html",icon:"skin/newicons/demo51.png"},
+					{id:"app4",name:"应用4",link:"../../sample_skin/normal/table-pop-content1.html",icon:"skin/newicons/demo50.png"},
+					{id:"app5",name:"应用5",link:"../../sample_skin/normal/tab-pop-content1.html",icon:"skin/newicons/demo49.png"},
+					{id:"app6",name:"应用6",link:"../../sample_skin/normal/user-assignment-content.html",icon:"skin/newicons/demo48.png"},
+					{id:"app7",name:"应用7",link:"../../sample_skin/normal/form-pop-content1.html",icon:"skin/newicons/demo47.png"},
+					{id:"app8",name:"应用8",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo46.png"},
+					{id:"app9",name:"应用9",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo45.png"},
+					{id:"app10",name:"应用10",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo44.png"},
+					{id:"app11",name:"应用11",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo43.png"},
+					{id:"app12",name:"应用12",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo42.png"},
+					{id:"app13",name:"应用13",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo41.png"},
+					{id:"app14",name:"应用14",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo40.png"},
+					{id:"app15",name:"应用15",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo39.png"},
+					{id:"app16",name:"应用16",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo38.png"},
+					{id:"app17",name:"应用17",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo37.png"},
+					{id:"app18",name:"应用18",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo36.png"},
+					{id:"app19",name:"应用19",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo35.png"},
+					{id:"app20",name:"应用20",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo34.png"},
+					{id:"app21",name:"应用21",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo33.png"},
+					{id:"app22",name:"应用22",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo32.png"},
+					{id:"app23",name:"应用23",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo31.png"},
+					{id:"app24",name:"应用24",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo30.png"},
+					{id:"app25",name:"应用25",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo29.png"},
+					{id:"app26",name:"应用26",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo28.png"},
+					{id:"app27",name:"应用27",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo27.png"},
+					{id:"app28",name:"应用28",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo26.png"},
+					{id:"app29",name:"应用29",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo25.png"},
+					{id:"app30",name:"应用30",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo24.png"},
+					{id:"app31",name:"应用31",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo23.png"},
+					{id:"app32",name:"应用32",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo22.png"},
+					{id:"app33",name:"应用33",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo21.png"},
+					{id:"app34",name:"应用34",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo20.png"},
+					{id:"app35",name:"应用35",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo19.png"},
+					{id:"app36",name:"应用36",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo18.png"},
+					{id:"app37",name:"应用37",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo17.png"},
+					{id:"app38",name:"应用38",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo16.png"},
+					{id:"app39",name:"应用39",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo15.png"},
+					{id:"app40",name:"应用40",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo14.png"},
+					{id:"app41",name:"应用41",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo13.png"},
+					{id:"app42",name:"应用42",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo12.png"},
+					{id:"app43",name:"应用43",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo11.png"},
+					{id:"app44",name:"应用44",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo10.png"},
+					{id:"app45",name:"应用45",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo9.png"},
+					{id:"app46",name:"应用46",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo8.png"},
+					{id:"app47",name:"应用47",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo7.png"},
+					{id:"app48",name:"应用48",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo6.png"},
+					{id:"app49",name:"应用49",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo5.png"},
+					{id:"app50",name:"应用50",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo4.png"},
+					{id:"app51",name:"应用51",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo3.png"},
+					{id:"app52",name:"应用52",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo2.png"},
+					{id:"app53",name:"应用53",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo1.png"}
+					]}
+		$.each(appstoreList["list"],function(idx,item){
+			var $listContent=$('<div></div>');
+			$("body").append($listContent);
+			var $iconItem=$('<div class="nav_icon_h_item "><a href="#"><div class="nav_icon_h_item_img"><img/></div><div class="nav_icon_h_item_text_store"></div></a></div>');
+			var $iconItemA=$iconItem.find("a");
+			$iconItemA.click(function(){
+				top.openAppStoreTree(item.link,item.name,item.id,item.icon);
+			})
+			if(item.icon){
+				$iconItem.find("img").attr("src",item.icon);
+			}
+			
+			$iconItem.find(".nav_icon_h_item_text_store").text(item.name);
+			$iconItem.find(".nav_icon_h_item_text_store").attr("title",item.name);
+			$listContent.append($iconItem);
+		});
+		
+	})
+</script>
+</head>
+<body class="appStoreBg">
+	
+</body>	
+</html>

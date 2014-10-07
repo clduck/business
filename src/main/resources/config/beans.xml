@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+          http://www.springframework.org/schema/tx 
+          http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+   
+      <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射  -->
+      <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	 </bean>
+	 <!-- Spring添加对JSON的支持 -->
+	 <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" >
+	     <property name = "supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+                <value>text/html;charset=UTF-8</value>   
+            </list>   
+         </property>   
+	 </bean>
+   
+   
+   <!-- ibatis sqlSession配置 -->
+    <bean id="sqlSession" name="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+    
+    <!-- DAO抽象类 -->
+    <bean id="abstractDao" class="com.business.mgr.AbstractDao" abstract="true">
+     <property name="sqlSession" ref="sqlSession"/>
+    </bean>
+    
+    <!-- dao -->
+<!--     <bean id="userInfoDao"  class="com.business.mgr.usermgr.impl.UserInfoDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="menuInfoDao"  class="com.business.mgr.adminMgr.impl.MenuInfoDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="aboutInfoDao" class="com.business.mgr.adminMgr.impl.AboutInfoDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="memGroupDao"  class="com.business.mgr.adminMgr.impl.MemGroupDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="newsInfoDao"  class="com.business.mgr.adminMgr.impl.NewsInfoDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="newsTypeDao"  class="com.business.mgr.adminMgr.impl.NewsTypeDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="productInfoDao"  class="com.business.mgr.adminMgr.impl.ProductInfoDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="productTypeDao"  class="com.business.mgr.adminMgr.impl.ProductTypeDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="downloadInfoDao"  class="com.business.mgr.adminMgr.impl.DownloadInfoDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="downloadTypeDao"  class="com.business.mgr.adminMgr.impl.DownloadTypeDaoImpl" parent="abstractDao"/> -->
+<!--     <bean id="jobInfoDao"  class="com.business.mgr.adminMgr.impl.JobInfoDaoImpl" parent="abstractDao"/> -->
+    <!-- service 
+    <bean id="loginService" class="com.business.service.impl.LoginServiceImpl"/>
+    <bean id="menuInfoService" class="com.business.service.impl.MenuInfoServiceImpl"/>
+    <bean id="aboutInfoService" class="com.business.service.impl.AboutInfoServiceImpl"/>
+    <bean id="memGroupService" class="com.business.service.impl.MemGroupServiceImpl"/>
+    <bean id="newsInfoService" class="com.business.service.impl.NewsInfoServiceImpl"/>
+    <bean id="newsTypeService" class="com.business.service.impl.NewsTypeServiceImpl"/>
+    -->
+</beans>
+

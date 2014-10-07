@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.cn.duck.model.DownloadType">
+  <!-- 下载类型信息 -->
+   <resultMap id="downloadTypeMap" type="downloadType" >
+        <result  property="downloadTypeID"    column="ID"            javaType="int"/>
+		<result  property="sortName"  column="SortName"   javaType="String"/> 
+		<result  property="viewFlag"     column="ViewFlag"      javaType="int"/>
+		<result  property="parentID"       column="parentID"        javaType="int"/>
+		<result  property="sortPath"     column="SortPath"      javaType="String"/>
+		<result  property="clickNumber"    column="ClickNumber"     javaType="int"/>
+		<result  property="leaf"      column="Leaf"       javaType="int"/>
+		<result  property="status"      column="Status"       javaType="int"/>
+		
+   </resultMap>
+   <!-- 获取下载类别信息 -->
+    <select id="queryDownloadTypes"  resultType="downloadType">
+      <![CDATA[
+	      SELECT ID as downloadTypeID,sortName,ViewFlag,
+			ParentID,SortPath,ClickNumber,Status,Leaf
+			FROM business_downsort
+	  ]]>
+	  where 1=1  
+	  <include refid="querywhereClause"/>
+	  and status = 0 order by ID desc 
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+      <if test=" downloadTypeID != null">
+         and ID = #{downloadTypeID}
+      </if>
+   </sql>
+   
+    <!-- 插入下载类别信息记录 -->
+   <insert id="insertDownloadType" parameterType="downloadType"  keyProperty="downloadTypeID" useGeneratedKeys="true">
+      <![CDATA[
+         insert into business_downsort (SortName,ViewFlag,ParentID,SortPath,ClickNumber,Status,Leaf)
+                              values(#{sortName},#{viewFlag},#{parentID},#{sortPath},#{clickNumber},#{status},#{leaf})
+      ]]>
+       <!-- 获取主键并返回  -->
+       <selectKey keyProperty="downloadTypeID" resultType="int">
+         <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+       </selectKey>
+      
+   </insert>
+   
+   <!-- 修改下载信息 -->
+   <update id="modifyDownloadType" parameterType="downloadType">
+          update business_downsort  
+           <set>
+           <if test="sortName != null">SortName = #{sortName}, </if>
+           <if test="viewFlag != null">ViewFlag  = #{viewFlag},</if>
+           <if test="parentID != null">ParentID   = #{parentID},</if>
+           <if test="sortPath != null">SortPath   = #{sortPath},</if>
+           <if test="clickNumber != null">ClickNumber    = #{clickNumber},</if>
+           <if test="status != null">status      = #{status}</if>
+           <if test="leaf != null"> leaf = #{leaf}</if>
+           </set>
+           where 1=1 and ID = #{downloadTypeID}
+   </update>
+   <!-- 更新下载类型的sortPath  || 连接字符串的方式 -->
+   <update id="modifySortPath" parameterType="java.util.Map">
+        UPDATE business_downsort t  
+         set t.sortPath =  REPLACE(t.sortPath, #{oldSortPath}, #{newSortPath})
+         where t.sortpath like CONCAT('${sortPath}','%' )
+
+   </update>
+   <update id="modifyParentLeaf" parameterType="long" statementType="CALLABLE">
+      {
+        call modifyDownloadLeaf(#{parentID})
+      }
+   </update>
+   <!-- 删除下载类别信息 -->
+   <delete id="deleteDownloadType" parameterType="downloadType">
+        update business_downsort set status = 1 where 
+        SortPath like CONCAT('${sortPath}','%' )
+        <!-- 
+        in 
+        <foreach item="newsTypeIds" collection="list"
+         open="(" separator="," close=")">
+         #{newsTypeIds}
+        </foreach>
+         -->
+   </delete>
+   <!-- 获取某个分支树 --> 
+   <select id="selectSortPath"  parameterType="downloadType" resultMap="downloadTypeMap">
+      select t.* from business_downsort t  where t.sortpath like  CONCAT('${sortPath}','%' )
+   </select>
+</mapper>

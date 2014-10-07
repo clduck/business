@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<!--框架必需start-->
+<link href="../../libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+<link href="../../libs/skins/blue/style.css" rel="stylesheet" type="text/css" id="theme" themeColor="blue" positionTarget="positionContent"/>
+<link href="skin/style.css" rel="stylesheet" type="text/css" id="skin" skinPath="system/blue3_tabh_list/skin/"/>
+<script type="text/javascript" src="../../libs/js/jquery.js"></script>
+<script type="text/javascript" src="../../libs/js/main.js"></script>
+<!--框架必需end-->
+
+<!--弹窗组件start-->
+<script type="text/javascript" src="../../libs/js/popup/drag.js"></script>
+<script type="text/javascript" src="../../libs/js/popup/dialog.js"></script>
+<!--弹窗组件end-->
+
+<!--分隔条start-->
+<script type="text/javascript" src="../../libs/js/nav/spliter.js"></script>
+<!--分隔条end-->
+
+<!--横向tab导航start-->
+<script type="text/javascript" src="../../libs/js/nav/nav_htabMenu.js"></script>
+<!--横向tab导航end-->
+<script>
+function bookmarksite(title, url){
+    if (window.sidebar) // firefox
+        window.sidebar.addPanel(title, url, "");
+    else 
+        if (window.opera && window.print) { // opera
+            var elem = document.createElement('a');
+            elem.setAttribute('href', url);
+            elem.setAttribute('title', title);
+            elem.setAttribute('rel', 'sidebar');
+            elem.click();
+        }
+        else 
+            if (document.all)// ie
+                window.external.AddFavorite(url, title);
+}
+function windowClose(){
+window.opener=null;
+  window.open('', '_self'); //IE7必需的.
+  window.close();
+}
+function backHome(){
+	document.getElementById("frmleft").contentWindow.homeHandler();
+}
+$(function(){
+	var data={"list":[
+			{id:"1",name:"常用模板"},
+			{id:"2",name:"标签导航"},
+			{id:"3",name:"标签导航"},
+			{id:"4",name:"标签导航"}
+			]}
+	createTabH(data);
+})
+function getListData(idx){
+	if(idx=="1"){
+		listData={"treeNodes":[
+		{ id:3001, parentId:0, name:"表单模板",icon:"../../libs/icons/lightOn.gif"},
+		{ id:101, parentId:3001, name:"页面中的表单",url:"../../sample_skin/normal/form-page.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:102, parentId:3001, name:"弹窗中的表单",url:"../../sample_skin/normal/form-pop.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		
+		{ id:3002, parentId:0, name:"表格模板",icon:"../../libs/icons/edit.gif"},
+		{ id:201, parentId:3002, name:"页面中的grid表格",url:"../../sample_skin/normal/grid-page.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:202, parentId:3002, name:"弹窗中的grid表格",url:"../../sample_skin/normal/grid-pop.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:203, parentId:3002, name:"页面中的table表格",url:"../../sample_skin/normal/table-page.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:204, parentId:3002, name:"弹窗中的table表格",url:"../../sample_skin/normal/table-pop.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		
+		{ id:3003, parentId:0, name:"选项卡模板",icon:"../../libs/icons/layers.gif"},
+		{ id:301, parentId:3003, name:"页面中的选项卡",url:"../../sample_skin/normal/tab-page.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:302, parentId:3003, name:"弹窗中的选项卡",url:"../../sample_skin/normal/tab-pop.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		
+		{ id:3004, parentId:0, name:"布局模板",icon:"../../libs/icons/find2.gif"},
+		{ id:401, parentId:3004, name:"单级纵向导航",url:"../../sample_skin/normal/nav-single.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:402, parentId:3004, name:"双级纵向导航",url:"../../sample_skin/normal/nav-double.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:403, parentId:3004, name:"分隔条",url:"../../sample_skin/normal/spliter.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		
+		{ id:3005, parentId:0, name:"图片模板",icon:"../../libs/icons/img.gif",url:"../../sample_skin/normal/pic-list.html", target:"frmright"},
+		
+		{ id:3006, parentId:0, name:"情景模板",icon:"../../libs/icons/key.gif"},
+		{ id:601, parentId:3006, name:"机构维护",url:"../../sample_skin/normal/org-management.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:602, parentId:3006, name:"用户管理",url:"../../sample_skin/normal/user-management.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:603, parentId:3006, name:"角色管理",url:"../../sample_skin/normal/role-management.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:604, parentId:3006, name:"资源分配(按用户)",url:"../../sample_skin/normal/user-assignment.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:605, parentId:3006, name:"资源分配(按角色)",url:"../../sample_skin/normal/role-assignment.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"},
+		{ id:606, parentId:3006, name:"综合box容器布局",url:"../../sample_skin/normal/layout-box.html", target:"frmright",iconOpen:"../../libs/icons/folder_doc.gif",iconClose:"../../libs/icons/folder_doc.gif",icon:"skin/titlebar_arrow.gif"}
+	]};
+	}
+	else if(idx=="2"){
+		listData={"treeNodes":[
+			{ id:701, parentId:3002, name:"日志管理",icon:"../../libs/icons/lightOn.gif"},
+			{ id:702, parentId:3002, name:"浏览相册",icon:"../../libs/icons/edit.gif"},
+			{ id:703, parentId:3002, name:"日志评论",icon:"../../libs/icons/layers.gif"},
+			{ id:704, parentId:3002, name:"访客留言",icon:"../../libs/icons/find2.gif"},
+			{ id:705, parentId:3002, name:"添加订阅",icon:"../../libs/icons/img.gif"},
+			{ id:706, parentId:3002, name:"我的好友",icon:"../../libs/icons/key.gif"},
+			{ id:707, parentId:3002, name:"更新数据",icon:"../../libs/icons/list.gif"}
+		]};
+	}
+	else if(idx=="3"){
+		listData={"treeNodes":[
+			{ id:801, parentId:3002, name:"其他栏目1",icon:"../../libs/icons/find2.gif"},
+			{ id:802, parentId:3002, name:"其他栏目2",icon:"../../libs/icons/img.gif"},
+			{ id:803, parentId:3002, name:"其他栏目3",icon:"../../libs/icons/key.gif"}
+		]};
+	}
+	else if(idx=="4"){
+		listData={"treeNodes":[
+			{ id:901, parentId:3002, name:"其他栏目4",icon:"../../libs/icons/list.gif"},
+			{ id:902, parentId:3002, name:"其他栏目5",icon:"../../libs/icons/layers.gif"},
+			{ id:903, parentId:3002, name:"其他栏目6",icon:"../../libs/icons/edit.gif"}
+		]};
+	}
+	return listData;
+}
+</script>
+<style>
+a {
+	behavior:url(../../libs/js/method/focus.htc)
+}
+</style>
+</head>
+<body>
+<div id="mainFrame">
+<!--头部与导航start-->
+<div id="hbox">
+	<div id="bs_bannercenter">
+	<div id="bs_bannerright">
+	<div id="bs_bannerleft">	
+		<div class="top_function">
+			<div class="float_left  padding_right10 white">
+				【今天是
+				<script>
+					var weekDayLabels = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+					var now = new Date();
+				    var year=now.getFullYear();
+					var month=now.getMonth()+1;
+					var day=now.getDate()
+				    var currentime = year+"年"+month+"月"+day+"日 "+weekDayLabels[now.getDay()]
+					document.write(currentime)
+				</script>】
+			</div>	
+			<a href="open.html" target="frmright" onclick="backHome()"><span class="icon_home hand white">返回导航页</span></a>
+			<span class="icon_delete hand white" onclick='top.Dialog.confirm("确定要关闭本页吗？",function(){windowClose()});'>关闭本页</span>
+		</div>
+		<div class="top_info">
+			欢迎用户：admin
+		</div>
+		<div class="top_font">
+			<li class="fontTitle">字号:</li>
+			<li class="fontChange"><span><a href="javascript:;" setFont="16">大</a></span></li>
+			<li class="fontChange"><span><a href="javascript:;" setFont="14">中</a></span></li>
+			<li class="fontChange"><span><a href="javascript:;" setFont="12">小</a></span></li>
+			<div class="clear"></div>	
+		</div>
+	</div>
+	</div>
+	</div>
+</div>
+<!--头部与导航end-->
+
+<table width="100%" cellpadding="0" cellspacing="0" class="table_border0">
+	<tr>
+		<!--左侧区域start-->
+		<td id="hideCon" class="ver01 ali01">
+							<div id="lbox">
+								<div id="lbox_topcenter">
+								<div id="lbox_topleft">
+								<div id="lbox_topright">
+								</div>
+								</div>
+								</div>
+								<div id="lbox_middlecenter">
+								<div id="lbox_middleleft">
+								<div id="lbox_middleright">
+										<div id="bs_left">
+										<IFRAME height="100%" width="100%"  frameBorder=0 id=frmleft name=frmleft src="left.html"  allowTransparency="true"></IFRAME>
+										</div>
+										<!--更改左侧栏的宽度需要修改id="bs_left"的样式-->
+								</div>
+								</div>
+								</div>
+								<div id="lbox_bottomcenter">
+								<div id="lbox_bottomleft">
+								<div id="lbox_bottomright">
+									<div class="lbox_foot"></div>
+								</div>
+								</div>
+								</div>
+							</div>
+		</td>
+		<!--左侧区域end-->
+		
+		<!--分隔栏区域start-->
+		<td class="spliter main_shutiao" targetId="hideCon" beforeClickTip="收缩面板" afterClickTip="展开面板" beforeClickClass="bs_leftArr" afterClickClass="bs_rightArr">
+		</td>
+		<!--分隔栏区域end-->
+		
+		<!--右侧区域start-->
+		<td class="ali01 ver01"  width="100%">
+							<div id="rbox">
+								<div id="rbox_topcenter">
+								<div id="rbox_topleft">
+								<div id="rbox_topright">
+								</div>
+								</div>
+								</div>
+								<div id="rbox_middlecenter">
+								<div id="rbox_middleleft">
+								<div id="rbox_middleright">
+									<div id="bs_right">
+									       <IFRAME height="100%" width="100%" frameBorder=0 id=frmright name=frmright src="open.html"  allowTransparency="true"></IFRAME>
+									</div>
+								</div>
+								</div>
+								</div>
+								<div id="rbox_bottomcenter" >
+								<div id="rbox_bottomleft">
+								<div id="rbox_bottomright">
+
+								</div>
+								</div>
+								</div>
+							</div>
+		</td>
+		<!--右侧区域end-->
+	</tr>
+</table>
+
+<!--尾部区域start-->
+<div id="fbox">
+	<div id="bs_footcenter">
+	<div id="bs_footleft">
+	<div id="bs_footright">
+		版权所有：http://www.quickui.net
+	</div>
+	</div>
+	</div>
+</div>
+</div>
+<!--尾部区域end-->
+
+<!--浏览器resize事件修正start-->
+<div id="resizeFix"></div>
+<!--浏览器resize事件修正end-->
+
+<!--窗口任务栏区域start-->
+<div id="dialogTask" class="dialogTaskBg" style="display:none;"></div>
+<!--窗口任务栏区域end-->
+
+<!--载进度条start-->
+<div class="progressBg" id="progress" style="display:none;"><div class="progressBar"></div></div>
+<!--载进度条end-->
+</body>
+</html>

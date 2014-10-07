@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<!--框架必需start-->
+<link href="../../libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+<link href="../../libs/skins/blue/style.css" rel="stylesheet" type="text/css" id="theme" themeColor="blue"/>
+<link href="skin/style.css" rel="stylesheet" type="text/css" id="skin" skinPath="system/workdesk/skin/"/>
+<script type="text/javascript" src="../../libs/js/jquery.js"></script>
+<script type="text/javascript" src="../../libs/js/main.js"></script>
+<!--框架必需end-->
+
+<!--弹窗组件start-->
+<script type="text/javascript" src="../../libs/js/popup/drag.js"></script>
+<script type="text/javascript" src="../../libs/js/popup/dialog.js"></script>
+<!--弹窗组件end-->
+
+<!--鱼眼菜单start-->
+<script type="text/javascript" src="../../libs/js/nav/fishEye.js"></script>
+<!--鱼眼菜单end-->
+
+<!--初始化桌面start -->
+<script type="text/javascript" src="js/initDesk.js"></script>
+<!--初始化桌面start -->
+
+<!--即时通讯相关start -->
+<script type="text/javascript" src="../../libs/js/tree/ztree/ztree.js"></script>
+<link href="../../libs/js/tree/ztree/ztree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="js/chat.js"></script>
+<!--即时通讯相关end -->
+
+<!--右键菜单start-->
+<script src="../../libs/js/nav/contextMenu.js" type="text/javascript"></script>  
+<!--右键菜单end-->
+
+<!-- 自动完成框start -->
+<script type="text/javascript" src="../../libs/js/form/autoComplete.js"></script>
+<!-- 自动完成框end -->
+
+<!--修正IE6不支持PNG图start-->
+<style>
+img {
+	behavior:url("../../libs/js/method/pngFix/pngbehavior.htc");
+}
+</style>
+<!--修正IE6不支持PNG图end-->
+
+<style>
+a {
+	behavior:url(../../libs/js/method/focus.htc)
+}
+</style>
+<script>
+function bookmarksite(title, url){
+    if (window.sidebar) // firefox
+        window.sidebar.addPanel(title, url, "");
+    else 
+        if (window.opera && window.print) { // opera
+            var elem = document.createElement('a');
+            elem.setAttribute('href', url);
+            elem.setAttribute('title', title);
+            elem.setAttribute('rel', 'sidebar');
+            elem.click();
+        }
+        else 
+            if (document.all)// ie
+                window.external.AddFavorite(url, title);
+}
+function windowClose(){
+window.opener=null;
+  window.open('', '_self'); //IE7必需的.
+  window.close();
+}
+
+
+$(function(){
+	//创建图标
+	iconData={"list":[
+			{id:"1",group:[
+				{children:[
+					{id:"1-1",name:"分组表单",link:"../../sample_skin/normal/form-pop-content1.html",icon:"skin/newicons/demo1.png"},
+					{id:"1-2",name:"DataGrid",link:"../../sample_skin/normal/grid-pop-content1.html",icon:"skin/newicons/demo2.png"},
+					{id:"1-3",name:"文章列表",link:"../../sample_skin/normal/layout-box-content1.html",icon:"skin/newicons/demo3.png"},
+					{id:"1-4",name:"table模板",link:"../../sample_skin/normal/table-pop-content1.html",icon:"skin/newicons/demo4.png"},
+					{id:"1-5",name:"选项卡模板",link:"../../sample_skin/normal/tab-pop-content1.html",icon:"skin/newicons/demo5.png"},
+					{id:"1-6",name:"综合表格",link:"../../sample_skin/normal/user-assignment-content.html",icon:"skin/newicons/demo6.png"},
+					{id:"1-7",name:"分组表单",link:"../../sample_skin/normal/form-pop-content1.html",icon:"skin/newicons/demo7.png"},
+					{id:"1-8",name:"新增用户",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo8.png"}
+				],name:"系统管理",id:"group1"},
+				{children:[
+					{id:"1-9",name:"详情查看",link:"../../sample_skin/normal/user-management-content2.html",icon:"skin/newicons/demo9.png"},
+					{id:"1-10",name:"分组表单",link:"../../sample_skin/normal/form-pop-content1.html",icon:"skin/newicons/demo10.png"},
+					{id:"1-11",name:"DataGrid",link:"../../sample_skin/normal/grid-pop-content1.html",icon:"skin/newicons/demo11.png"},
+					{id:"1-12",name:"table模板",link:"../../sample_skin/normal/table-pop-content1.html",icon:"skin/newicons/demo12.png"}
+				],name:"基础信息",id:"group2"},
+				{children:[
+					{id:"1-13",name:"文章列表",link:"../../sample_skin/normal/layout-box-content1.html",icon:"skin/newicons/demo13.png"},
+					{id:"1-14",name:"选项卡模板",link:"../../sample_skin/normal/tab-pop-content1.html",icon:"skin/newicons/demo14.png"},
+					{id:"1-15",name:"综合表格",link:"../../sample_skin/normal/user-assignment-content.html",icon:"skin/newicons/demo15.png"},
+					{id:"1-16",name:"新增用户",link:"../../sample_skin/normal/user-management-content.html",icon:"skin/newicons/demo16.png"},
+					{id:"1-17",name:"详情查看",link:"../../sample_skin/normal/user-management-content2.html",icon:"skin/newicons/demo17.png"}
+				],name:"用户信息",id:"group3"}
+			]},
+			{id:"2",group:[
+				{children:[
+					{id:"2-1",name:"其他菜单项",icon:"skin/newicons/demo18.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo19.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo20.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo21.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo22.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo23.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo24.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo25.png"}
+				],name:"其他栏目1",id:"group4"},
+				{children:[
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo26.png"},
+					{id:"2-1",name:"其他菜单项",icon:"skin/newicons/demo27.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo28.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo29.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo30.png"}
+				],name:"其他栏目2",id:"group5"},
+				{children:[
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo31.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo32.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo33.png"},
+					{id:"2-1",name:"其他菜单项",icon:"skin/newicons/demo34.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo35.png"}
+				],name:"其他栏目3",id:"group6"}
+			]},
+			{id:"3",group:[
+				{children:[
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo36.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo37.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo38.png"},
+					{id:"2-1",name:"其他菜单项",icon:"skin/newicons/demo39.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo40.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo41.png"}
+				],name:"其他栏目4",id:"group7"},
+				{children:[
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo42.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo43.png"},
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo44.png"}
+					
+				],name:"其他栏目5",id:"group8"},
+				{children:[
+					{id:"2-2",name:"其他菜单项",icon:"skin/newicons/demo45.png"}
+				],name:"其他栏目6",id:"group9"}
+			]}
+		]}
+	createDeskIcon(iconData);
+})
+
+</script>
+<style>
+a {
+	behavior:url(../../libs/js/method/focus.htc)
+}
+</style>
+</head>
+<body style="background-color:#2571a4;">
+	<div class="desktop">
+		<div class="titleBg">
+			<div class="info">
+					欢迎admin用户，今天是
+				<script>
+					var weekDayLabels = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+					var now = new Date();
+				    var year=now.getFullYear();
+					var month=now.getMonth()+1;
+					var day=now.getDate()
+				    var currentime = year+"年"+month+"月"+day+"日 "+weekDayLabels[now.getDay()]
+					document.write(currentime)
+				</script>
+			</div>
+			<div class="function">
+				<ul>
+					<li class="icon3"><a  onclick='top.Dialog.open({URL:"include/skin.html",Title:"更换背景",Modal:false,ResizeResetPosition:false,ShowMinButton:true,Width:720,Height:460,MinToTask:true,ID:"changebg"});'>更换背景</a></li>
+					<li class="icon1"><a  onclick='top.Dialog.open({URL:"include/message.html",Title:"消息提醒",Modal:false,ResizeResetPosition:false,ShowMinButton:true,MinToTask:true,ID:"message"});'>消息提醒</a></li>
+					<li class="icon2"><a  onclick='top.Dialog.confirm("确定要退出系统吗",function(){window.location="login.html"});'>退出系统</a></li>
+					<div class="clear"></div>
+				</ul>
+			</div>
+			<div class="top_title">QUI网页界面集成框架</div>
+		</div>
+		
+	</div>
+	
+	
+	<div class="chat_main" id="chat_main">
+		<div class="chat_top" >
+			<div class="chat_top_arr"><a  id="topArr" onfocus="this.blur()"><span class="img_btn_up" id="icon_arr"></span></a></div>
+			<div class="chat_top_line1">当前在线好友：10人</div>
+			<div class="chat_top_line2">
+				<label class="float_left">用户名:张小三</label> 
+				<input class="float_right btnStyle"  type="button" value="查看信息" onclick="viewInfo()"/> 
+				<label  class="float_right padding_right2 padding_top1">状态：隐身 </label> 
+				<div class="clear"></div>
+			</div>
+			<div class="chat_top_line3">
+				<table width="100%">
+					<tr>
+						<td width="90%" class="ali03"><input type="text" class="textinput textinputChat" id="searchKey" value=""></td>
+						<td><span class="img_find hand" title="点击查找节点" keepDefaultStyle="true" onclick="findNode()"></span></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="chat_middle">
+			<div class="chat_middleCon">
+				<div>
+				    <ul id="treeDemo" class="ztree"></ul>
+				</div>
+			</div>
+			<div class="padding_left40">
+				<span class="icon_add hand" onclick="addFriend()">添加好友</span>
+				<span class="icon_find hand" onclick="searchRoom()">搜索聊天室</span>
+				<br/>
+			</div>
+		</div>
+		<div class="chat_bottom"></div>
+	</div>
+	
+	<div class="dock" id="mydock">
+		<div class="dock_left"></div>
+		<div class="dock_center">
+			<div id="dock">
+				<div class="dock-container">
+					<a class="dock-item" href="javascript:;" keepDefaultStyle="true" onclick='top.Dialog.alert("账户管理");' title="账户管理"><span>账户管理</span><img src="skin/dock/01.png"></a>
+					<a class="dock-item" href="javascript:;" keepDefaultStyle="true" onclick='top.Dialog.alert("电子邮件");' title="电子邮件"><span>电子邮件</span><img src="skin/dock/02.png"/></a>
+					<a class="dock-item" href="javascript:;" keepDefaultStyle="true" onclick='top.Dialog.alert("综合查询");' title="综合查询"><span>综合查询</span><img src="skin/dock/03.png"/></a>
+					<a class="dock-item" href="javascript:;" keepDefaultStyle="true" onclick='top.Dialog.alert("系统设置");' title="系统设置"><span>系统设置</span><img src="skin/dock/04.png"/></a>
+				</div>
+			</div>
+		</div>
+		<div class="dock_right"></div>
+		<div class="clear"></div>
+	</div>
+	
+	<div class="iconnav" id="iconnav">
+		<div class="iconnav_left">
+		</div>
+		<div class="iconnav_center">
+			<ul id="iconnavCon" class="iconnavCon"></ul>
+		</div>
+		<div class="iconnav_right1"></div>
+		<div class="iconnav_right3">
+			<div class="listBtn_con">
+			<a href="javascript:;" onclick="showAllIcon()" class="listBtn" keepDefaultStyle="true" title="全局视图">button</a>
+			<a href="javascript:;" onclick="showSearchPanel()" class="findBtn" keepDefaultStyle="true" title="搜索">button</a>
+			<div class="clear"></div>
+			</div>
+		</div>
+		<div class="iconnav_right2"></div>
+		<div class="clear"></div>
+	</div>
+	
+	<div class="searchPanel" id="searchPanel" style="display:none;">
+		<div class="searchPanelCon">
+			<input type="text" class="searchInput" id="searchInput" position="mode2"/>
+			<a href="javascript:;" onclick="searchHandler()" class="findBtn searchPadding" keepDefaultStyle="true" title="搜索">button</a>
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	<a class="addIcon" onclick='openAppStore()'></a>
+<!--窗口任务栏区域start-->
+<div id="dialogTask" class="dialogTaskBg" style="display:none;"></div>
+<!--窗口任务栏区域end-->
+</body>
+</html>

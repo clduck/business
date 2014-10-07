@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.cn.duck.model.UserInfo">
+
+   <resultMap id="WchMap" type="Wch">
+      <result property="id"          column="id"         javaType="Integer"/>
+      <result property="gjz"         column="gjz"        javaType="String"/>
+      <result property="jzlevel"     column="jzlevel"    javaType="String"/>
+      <result property="sstatol"     column="sstatol"    javaType="String"/>
+      <result property="type"        column="type"       javaType="String"/>
+      <result property="gjz1"        column="gjz1"       javaType="String"/>
+   </resultMap>
+   
+    <!-- 存入用户信息 -->
+   <insert id="insertUserInfo" parameterType="UserInfo">
+      <![CDATA[
+        insert user_info (USER_ID,USER_NAME,PASSWORD,ROLE_ID,SEX,PHOTO_PATH,BIRTHDAY,PROVINCE_ID,CITY_ID,EMAILE,SCORE,LAST_LOGIN_DATE,REGIST_DATE,COMMENT) 
+            values (#{userId},#{userName},#{passWord},#{roleId},#{sex},#{photoPath},#{birthday},#{provinceId},#{cityId},#{email},#{score},#{lastLoginDate},#{registDate},#{comment});
+      ]]>
+   </insert>
+   
+   <!-- 查询用户信息 -->
+   <select id="queryUserInfo" resultType="UserInfo">
+     <![CDATA[
+        select t.* from user_info t 
+     ]]>
+      where 1=1 
+      <include refid="querywhereClause"/>
+   </select>
+   
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+        <if test=" userId != null">
+           and t.USER_ID = #{userId}
+        </if>
+        <if test="userName != null">
+           and t.USER_NAME = #{userName}
+        </if>
+        <if test="roleId != null">
+           and t.ROLE_ID = #{roleId}
+        </if>
+        <if test="sex != null">
+           and t.SEX = #{sex}
+        </if>
+        <if test="provinceId != null">
+           and t.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="cityId != null">
+            and t.CITY_ID = #{cityId}
+        </if>
+   </sql>
+   
+   <!-- 修改用户信息 -->
+   <update id="modifyUserInfo" parameterType="UserInfo" >
+
+       <![CDATA[ 
+           update user_info t  set t.USER_NAME = #{userName}
+       ]]>    
+           <if test=" birthDay != null">
+               ,t.BIRTHDAY = #{birthDay} 
+           </if>
+           <if test=" photoPath != null">
+               ,t.PHOTO_PATH = #{photoPath} 
+           </if>
+           <if test=" provinceId != null">
+               ,t.PROVINCE_ID = #{provinceId} 
+           </if>
+           <if test=" cityId != null">
+               ,t.CITY_ID = #{cityId} 
+           </if>
+           <if test=" email != null">
+               ,t.EMAILE = #{email}
+           </if>
+           <if test=" comment != null">
+               ,t.COMMENT = #{comment}
+           </if>
+       <![CDATA[     
+           where userId = #{userId#
+       ]]> 
+   </update>
+   
+   <select id="wchSelect" parameterType="Wch" resultMap="WchMap">
+       <![CDATA[
+         select t.* from wch1 t   
+         
+      ]]>
+      where 1=1 
+      <if test="gjz != null">
+           and t.gjz = #{gjz}
+      </if>   
+   </select>
+   
+   <select id="wchSelectByLike" resultMap="WchMap">
+       <![CDATA[
+         select t.* from wch1 t where 1=1 
+      ]]>
+      <foreach item="wchInfoIds" collection="list"
+         open="" separator="" close="">
+          and t.gjz like #{wchInfoIds}
+        </foreach>
+   </select>
+   
+   <update id="updateWch" parameterType="Wch">
+   
+    <![CDATA[
+         update wch4 t set t.gjz1 = #{gjz1} where t.id = #{id}
+      ]]>
+     
+   </update>
+   
+   <insert id="inertWch2" parameterType="Wch">
+       <![CDATA[
+         insert wch2 (gjz,jzlevel,sstatol,type,gjz1) 
+         values (#{gjz},#{jzlevel},#{sstatol},#{type},#{gjz1})
+      ]]>
+   </insert>
+</mapper>

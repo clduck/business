@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<!--框架必需start-->
+<script type="text/javascript" src="../../../libs/js/jquery.js"></script>
+<script type="text/javascript" src="../../../libs/js/framework.js"></script>
+<link href="../../../libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" id="skin" prePath="../../../"/>
+<!--框架必需end-->
+
+<!-- 树组件start -->
+<script type="text/javascript" src="../../../libs/js/tree/ztree/ztree.js"></script>
+<link type="text/css" rel="stylesheet" href="../../../libs/js/tree/ztree/ztree.css"></link>
+<!-- 树组件end -->
+
+<!-- 树形下拉框start -->
+<script type="text/javascript" src="../../../libs/js/form/selectTree.js"></script>
+<!-- 树形下拉框end -->
+ 
+
+<script>
+var nodes1 = {"treeNodes": [
+    { id:1,  parentId:0, name:"第一屏", open: true,clickExpand:true},
+    { id:11, parentId:1, name:"弹窗模板",parentScreen:0,parentGroup:"group1"},
+    { id:12, parentId:1, name:"基本页面模板",parentScreen:0,parentGroup:"group2"},
+    { id:13, parentId:1, name:"用户信息管理",parentScreen:0,parentGroup:"group3"},
+    { id:2,  parentId:0, name:"第二屏", open: true,clickExpand:true},
+    { id:21, parentId:2, name:"其他栏目1",parentScreen:1,parentGroup:"group4"},
+    { id:22, parentId:2, name:"其他栏目2",parentScreen:1,parentGroup:"group5"},
+    { id:23, parentId:2, name:"其他栏目3",parentScreen:1,parentGroup:"group6"},
+	{ id:3,  parentId:0, name:"第三屏", open: true,clickExpand:true},
+    { id:31, parentId:3, name:"其他栏目4",parentScreen:2,parentGroup:"group7"},
+    { id:32, parentId:3, name:"其他栏目5",parentScreen:2,parentGroup:"group8"},
+    { id:33, parentId:3, name:"其他栏目6",parentScreen:2,parentGroup:"group9"}
+]};
+$(function(){
+	 $("#selectTree-1").data("data",nodes1); 
+    $("#selectTree-1").render();
+})
+function sureHandler(){
+       var selectTreeId=$("#selectTree-1").attr("relValue");
+       var openMethod=$("#select-1").val();
+	   if(selectTreeId==null||selectTreeId==""){
+			alert("没有选择分组");
+		}
+		else{
+			//var idx=nodes[0].parentScreen;
+			//var groupId=nodes[0].parentGroup;
+			var node=$("#selectTree-1").data("selectedNode");
+			if(node){
+				top.page_desk_index.addAppStoreIcon(node.parentScreen,node.parentGroup,openMethod);
+			}
+			top.page_desk_index.closeTreeWindow();
+		}
+}
+function closeHandler(){
+	top.page_desk_index.closeTreeWindow();
+}
+</script>
+</head>
+<body style="overflow:hidden;">
+	<div class="padding_top20 padding_left5">
+		<table class="tableStyle" formMode="transparent">
+			<td>分组：</td>
+			<td>
+				<div class="selectTree" id="selectTree-1" keepDefaultStyle="true"></div>
+			</td>
+			</tr>
+			<tr>
+			<td>打开方式：</td>
+			<td><select id="select-1" data='{"list":[{"value":"popup","key":"弹出窗口方式"},{"value":"tab","key":"标签页方式"}]}'></select></td>
+			</tr>
+			<tr>
+			<tr>
+			<td colspan="2">
+				<input type="button" value="确定" onclick="sureHandler()"/>
+				<input type="button" value="取消" onclick="closeHandler()"/>
+			</td>
+			</tr>
+	    </table>
+	</div>
+</body>	
+</html>

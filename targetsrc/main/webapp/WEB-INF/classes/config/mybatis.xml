@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+<configuration>
+ <!-- 配置全局变量时，有顺序要求，properties 必须在前面 -->
+ <properties>
+	<property name="dialect" value="mysql"/>
+  </properties>
+  <settings>
+   <setting name="lazyLoadingEnabled" value="false" />
+  </settings>
+  <typeAliases>
+     <!-- 
+      <typeAlias alias="UserInfo" type="com.cn.duck.model.UserInfo"/>
+      <typeAlias alias="menuInfo" type="com.cn.duck.model.MenuInfo"/>
+      <typeAlias alias="aboutInfo" type="com.cn.duck.model.AboutInfo"/>
+      <typeAlias alias="memGroup" type="com.cn.duck.model.MemGroup"/>
+      <typeAlias alias="newsInfo" type="com.cn.duck.model.NewsInfo"/>
+      <typeAlias alias="newsType" type="com.cn.duck.model.NewsType"/>
+      <typeAlias alias="productInfo" type="com.cn.duck.model.ProductInfo"/>
+      <typeAlias alias="productParam" type="com.cn.duck.model.param.ProductParam"/>
+      <typeAlias alias="productType" type="com.cn.duck.model.ProductType"/>
+      <typeAlias alias="downloadInfo" type="com.cn.duck.model.DownloadInfo"/>
+      <typeAlias alias="downloadParam" type="com.cn.duck.model.param.ProductParam"/>
+      <typeAlias alias="downloadType" type="com.cn.duck.model.DownloadType"/>
+      <typeAlias alias="jobInfo" type="com.cn.duck.model.JobInfo"/>
+      <typeAlias alias="jobInfoParam" type="com.cn.duck.model.param.JobInfoParam"/>
+      
+      <typeAlias alias="Wch" type="com.cn.duck.model.Wch"/>
+       -->
+      
+      <typeAlias alias="newsType" type="com.cn.duck.model.NewsType"/>
+  </typeAliases>
+  <plugins>
+		<plugin interceptor="com.business.mybatis.interceptor.PaginationInterceptor">
+		</plugin>
+  </plugins>
+</configuration>

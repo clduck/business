@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.cn.duck.model.ProductType">
+  <!-- 产品类型信息 -->
+   <resultMap id="productTypeMap" type="productType" >
+        <result  property="productTypeID"    column="ID"            javaType="int"/>
+		<result  property="productTypeName"  column="SortName"   javaType="String"/> 
+		<result  property="viewFlag"     column="ViewFlag"      javaType="int"/>
+		<result  property="parentID"       column="parentID"        javaType="int"/>
+		<result  property="sortPath"     column="SortPath"      javaType="String"/>
+		<result  property="clickNumber"    column="ClickNumber"     javaType="int"/>
+		<result  property="picture"     column="Picture"  javaType="String"/>
+		<result  property="summary"      column="Summary"       javaType="String"/> 
+		<result  property="sequence"      column="Sequence"       javaType="int"/>
+		<result  property="leaf"      column="Leaf"       javaType="int"/>
+		<result  property="status"      column="Status"       javaType="int"/>
+		
+   </resultMap>
+   <!-- 获取产品类别信息 -->
+    <select id="queryProductTypes"  resultType="productType">
+      <![CDATA[
+	      SELECT ID as productTypeID,SortName as productTypeName,ViewFlag,
+			ParentID,SortPath,ClickNumber,Status,Leaf,picture,summary
+			FROM business_productsort
+	  ]]>
+	  where 1=1  
+	  <include refid="querywhereClause"/>
+	  and status = 0 order by ID desc 
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+      <if test=" productTypeID != null">
+         and ID = #{productTypeID}
+      </if>
+   </sql>
+   
+    <!-- 插入产品类别信息记录 -->
+   <insert id="insertProductType" parameterType="productType"  keyProperty="productTypeID" useGeneratedKeys="true">
+      <![CDATA[
+         insert into business_productsort (SortName,ViewFlag,ParentID,SortPath,ClickNumber,Status,Leaf,Summary,Sequence,Picture)
+                              values(#{productTypeName},#{viewFlag},#{parentID},#{sortPath},#{clickNumber},#{status},#{leaf},#{summary},#{sequence},#{picture})
+      ]]>
+       <!-- 获取主键并返回  -->
+       <selectKey keyProperty="productTypeID" resultType="int">
+         <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+       </selectKey>
+      
+   </insert>
+   
+   <!-- 修改企业信息 -->
+   <update id="modifyProductType" parameterType="productType">
+          update business_productsort  
+           <set>
+           <if test="productTypeName != null">SortName = #{productTypeName}, </if>
+           <if test="viewFlag != null">ViewFlag  = #{viewFlag},</if>
+           <if test="parentID != null">ParentID   = #{parentID},</if>
+           <if test="sortPath != null">SortPath   = #{sortPath},</if>
+           <if test="clickNumber != null">ClickNumber    = #{clickNumber},</if>
+           <if test="status != null">status      = #{status}</if>
+           <if test="leaf != null"> leaf = #{leaf}</if>
+           <if test="summary != null">Summary    = #{summary},</if>
+           <if test="sequence != null">Sequence      = #{sequence}</if>
+           <if test="picture != null">Picture = #{picture}</if>
+           </set>
+           where 1=1 and ID = #{productTypeID}
+   </update>
+   <!-- 更新产品类型的sortPath  || 连接字符串的方式 -->
+   <update id="modifySortPath" parameterType="java.util.Map">
+        UPDATE business_productsort t  
+         set t.sortPath =  REPLACE(t.sortPath, #{oldSortPath}, #{newSortPath})
+         where t.sortpath like CONCAT('${sortPath}','%' )
+
+   </update>
+   <update id="modifyParentLeaf" parameterType="long" statementType="CALLABLE">
+      {
+        call modifyProductLeaf(#{parentID})
+      }
+   </update>
+   <!-- 删除产品类别信息 -->
+   <delete id="deleteProductType" parameterType="productType">
+        update business_productsort set status = 1 where 
+        SortPath like CONCAT('${sortPath}','%' )
+        <!-- 
+        in 
+        <foreach item="newsTypeIds" collection="list"
+         open="(" separator="," close=")">
+         #{newsTypeIds}
+        </foreach>
+         -->
+   </delete>
+   <!-- 获取某个分支树 --> 
+   <select id="selectSortPath"  parameterType="productType" resultMap="productTypeMap">
+      select t.* from business_productsort t  where t.sortpath like  CONCAT('${sortPath}','%' )
+   </select>
+</mapper>

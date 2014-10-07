@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.business.model.AboutInfo">
+
+	<!-- 查询用户信息 -->
+	<resultMap id="AboutInfoMap" type="AboutInfo">
+	    <result property="ID" column="ID" />
+		<result property="aboutID" column="ID" />
+		<result property="aboutName" column="AboutNameCh" />
+		<result property="viewFlag" column="ViewFlagCh" />
+		<result property="content" column="ContentCh" />
+		<result property="clickNumber" column="ClickNumber" />
+		<result property="sequence" column="Sequence" />
+		<result property="groupID" column="GroupID" />
+		<result property="exclusive" column="Exclusive" />
+		<result property="childFlag" column="ChildFlag" />
+		<result property="status" column="status" />
+	</resultMap>
+
+	<!-- 新增AboutInfo实体类 -->
+	<insert id="insert" parameterType="AboutInfo">
+         insert into business_about  (
+         	<include refid="insertData_col"/>
+         )values (
+	     	<include refid="insertData_val"/>
+	     )
+	</insert>
+
+	<!-- 更新对象 -->
+	<update id="update" parameterType="AboutInfo">
+		update business_about
+		<include refid="updateData_set"/>
+		<include refid="updateData_where"/>
+	</update>
+
+	<!-- 更新对象（参数） -->
+<!-- 	<update id="updateParam" parameterType="java.util.Map"> -->
+<!-- 		update business_about -->
+<!-- 		<include refid="updateData_set"/> -->
+<!-- 		<include refid="updateData_where"/> -->
+<!-- 	</update> -->
+
+	<!-- 批量更新 -->
+	<update id="updateBatch" parameterType="AboutInfo">
+		<!-- collection可以是List对于list,数组对于array,Map对应ids -->
+		<foreach collection="list" item="AboutInfo" separator=";">
+			update business_about
+			<include refid="updateData_set"/>
+			<where>
+				<if test="AboutInfo.ID != null">
+					ID = #{AboutInfo.ID}
+				</if>
+			</where>
+		</foreach>
+	</update>
+
+   <!-- 删除下载信息 -->
+   <delete id="deleteAboutinfos">
+        delete from business_about where ID in 
+        <foreach item="aboutInfoIds" collection="list"
+         open="(" separator="," close=")">
+         #{aboutInfoIds}
+        </foreach>
+   </delete>
+   
+   
+
+	<!-- 根据主键删除 -->
+	<delete id="deletePK" parameterType="int">
+		delete from business_about where ID = #{pk}
+	</delete>
+
+	<!-- 根据参数删除 -->
+	<delete id="deleteParam" parameterType="java.util.Map">
+		delete from business_about
+		<include refid="deleteData_where"/>
+	</delete>
+
+	<!-- 批量删除 -->
+	<delete id="deleteBatch">
+		delete from business_about where ID in
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<foreach collection="list" item="pk" index="index" separator=",">
+				#{pk}
+			</foreach>
+		</trim>
+	</delete>
+
+	<!-- 批量插入 -->
+	<insert id="insertBatch" parameterType="arraylist">
+		insert into business_about(
+			<include refid="insertData_col"/>
+		)
+		<!-- collection可以是List对于list,数组对于array,Map对应ids -->
+		<foreach collection="list" item="AboutInfo" index="index"
+			separator="union all">
+			select(
+				<include refid="insertData_val"/>
+			)
+			from dual
+		</foreach>
+	</insert>
+
+	<!-- count -->
+	<select id="count" resultType="int">
+		select count(*) from
+		business_about 
+	</select>
+
+	<select id="countParam" parameterType="AboutInfo"
+		resultType="int">
+		select count(*) from business_about 
+		<include refid="queryData_where"/>
+	</select>
+
+	<!-- 查询（参数） -->
+	<select id="selectParam" parameterType="AboutInfo" resultMap="AboutInfoMap">
+		select * from business_about
+			<include refid="queryData_where"/>
+				<if test="conditions!= null">
+					<if test="conditions.orderColumn != null">
+					order by ${conditions.orderColumn}
+					<if test="conditions.orderTurn != null">
+						${conditions.orderTurn}
+					</if>
+					</if>
+				</if>
+	</select>
+	
+	<!-- 分页查询（参数） -->
+	<select id="selectPage" parameterType="AboutInfo" resultMap="AboutInfoMap">
+		select * from business_about
+			<include refid="queryData_where"/>
+				<if test="conditions!= null">
+					<if test="conditions.orderColumn != null">
+					order by ${conditions.orderColumn}
+					<if test="conditions.orderTurn != null">
+						${conditions.orderTurn}
+					</if>
+					</if>
+				</if>
+	</select>
+	
+	<!-- 查询（序列号） -->
+	<select id="selectPk" parameterType="int" resultMap="AboutInfoMap">
+		select * from business_about where 1 = 1 and ID = #{pk}
+	</select>
+
+    <!-- 插入数据列名 -->
+    <sql id="insertData_col">
+    	AboutName,ViewFlag,Content,ClickNumber,Sequence,GroupID,Exclusive,ChildFlag,AddTime,UpdateTime,ParentID,SortPath,status
+    </sql>
+    <!-- 插入数据值 -->
+    <sql id="insertData_val">
+    	 #{aboutName},
+         #{viewFlag},
+         #{content},
+         #{clickNumber},
+         #{sequence},
+         #{groupID},
+         #{exclusive},
+         #{childFlag},
+         #{addTime},
+         #{updateTime},
+         #{parentID},
+         #{sortPath},
+         #{status}
+    </sql>
+    <!--更新列语句 -->
+    <sql id="updateData_set">
+        <set>
+        	<trim suffix="" suffixOverrides=",">
+		    	<if test="updateTime != null">UpdateTime = #{updateTime},</if>
+			    <if test="aboutName != null">AboutName = #{aboutName}, </if>
+		        <if test="viewFlag != null">ViewFlag  = #{viewFlag},</if>
+		        <if test="content != null">Content   = #{content},</if>
+		        <if test="sequence != null">Sequence    = #{sequence},</if>
+		        <if test="groupID != null">GroupID     = #{groupID},</if>
+		        <if test="exclusive != null">Exclusive   = #{exclusive},</if>
+		        <if test="childFlag != null">ChildFlag   = #{childFlag},</if>
+		        <if test="parentID != null">ParentID    = #{parentID},</if>
+		        <if test="status != null">status      = #{status},</if>
+	        </trim>
+        </set>
+    </sql>
+    <!-- 更新列条件 -->
+    <sql id="updateData_where">
+    	<where>
+    		<trim suffix="" suffixOverrides=",">
+				<if test="conditions.aboutID != null">
+					ID = #{conditions.aboutID}
+				</if>
+				<if test="conditions.updateTime != null">
+					and UpdateTime = #{conditions.updateTime}
+				</if>
+				<if test="conditions.aboutName != null">
+					and AboutName = #{conditions.aboutName}
+				</if>
+				<if test="conditions.viewFlag != null">
+					and ViewFlag  = #{conditions.viewFlag}
+				</if>
+				<if test="conditions.content != null">
+					and Content   = #{conditions.content}
+				</if>
+				<if test="conditions.sequence != null">
+					and Sequence    = #{conditions.sequence}
+				</if>
+				<if test="conditions.groupID != null">
+					and GroupID     = #{conditions.groupID}
+				</if>
+				<if test="conditions.exclusive != null">
+					and Exclusive   = #{conditions.exclusive}
+				</if>
+				<if test="conditions.childFlag != null">
+					and ChildFlag   = #{conditions.childFlag}
+				</if>
+				<if test="conditions.parentID != null">
+					and ParentID    = #{conditions.parentID}
+				</if>
+				<if test="conditions.status != null">
+					and status      = #{conditions.status}
+				</if>
+			</trim>
+		</where>
+    </sql>
+    <!-- 删除数据条件 -->
+    <sql id="deleteData_where">
+    	<where>
+    		<trim suffix="" suffixOverrides=",">
+				<if test="conditions.aboutID != null">
+					ID = #{conditions.aboutID}
+				</if>
+				<if test="conditions.updateTime != null">
+					and UpdateTime = #{conditions.updateTime}
+				</if>
+				<if test="conditions.aboutName != null">
+					and AboutName = #{conditions.aboutName}
+				</if>
+				<if test="conditions.viewFlag != null">
+					and ViewFlag  = #{conditions.viewFlag}
+				</if>
+				<if test="conditions.content != null">
+					and Content   = #{conditions.content}
+				</if>
+				<if test="conditions.sequence != null">
+					and Sequence    = #{conditions.sequence}
+				</if>
+				<if test="conditions.groupID != null">
+					and GroupID     = #{conditions.groupID}
+				</if>
+				<if test="conditions.exclusive != null">
+					and Exclusive   = #{conditions.exclusive}
+				</if>
+				<if test="conditions.childFlag != null">
+					and ChildFlag   = #{conditions.childFlag}
+				</if>
+				<if test="conditions.parentID != null">
+					and ParentID    = #{conditions.parentID}
+				</if>
+				<if test="conditions.status != null">
+					and status      = #{conditions.status}
+				</if>
+			</trim>
+		</where>
+    </sql>  
+    <!-- 查询数据条件 -->
+    <sql id="queryData_where">
+    	<where>
+    		<trim suffix="" suffixOverrides=",">
+    			<if test="conditions!= null">
+					<if test="conditions.aboutID != null">
+						ID = #{conditions.aboutID}
+					</if>
+					<if test="conditions.updateTime != null">
+						and UpdateTime = #{conditions.updateTime}
+					</if>
+					<if test="conditions.aboutName != null">
+						and AboutName = #{conditions.aboutName}
+					</if>
+					<if test="conditions.viewFlag != null">
+						and ViewFlag  = #{conditions.viewFlag}
+					</if>
+					<if test="conditions.content != null">
+						and Content   = #{conditions.content}
+					</if>
+					<if test="conditions.sequence != null">
+						and Sequence    = #{conditions.sequence}
+					</if>
+					<if test="conditions.groupID != null">
+						and GroupID     = #{conditions.groupID}
+					</if>
+					<if test="conditions.exclusive != null">
+						and Exclusive   = #{conditions.exclusive}
+					</if>
+					<if test="conditions.childFlag != null">
+						and ChildFlag   = #{conditions.childFlag}
+					</if>
+					<if test="conditions.parentID != null">
+						and ParentID    = #{conditions.parentID}
+					</if>
+					<if test="conditions.status != null">
+						and status      = #{conditions.status}
+					</if>
+				</if>
+			</trim>
+		</where>
+    </sql>   
+</mapper> 

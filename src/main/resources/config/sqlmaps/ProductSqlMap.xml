@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.business.model.ProductInfo">
+  <!-- 产品信息 -->
+   <resultMap id="productInfoMap" type="productInfo" >
+        <result  property="productID"    column="ID"            javaType="int"/>
+		<result  property="productName"  column="ProductName"   javaType="String"/> 
+		<result  property="viewFlag"     column="ViewFlag"      javaType="int"/>
+		<result  property="sortID"       column="SortID"        javaType="int"/>
+		<result  property="sortPath"     column="SortPath"      javaType="String"/>
+		<result  property="productNo"    column="ProductNo"     javaType="String"/>
+		<result  property="productModel" column="ProductModel"  javaType="String"/>
+		<result  property="N_Price"      column="N_Price"       javaType="double"/> 
+		<result  property="P_Price"      column="P_Price"       javaType="double"/>
+		<result  property="stock"        column="Stock"         javaType="int"/> 
+		<result  property="unit"         column="Unit"          javaType="String"/>
+		<result  property="commendFlag"  column="CommendFlag"   javaType="int"/> 
+		<result  property="newFlag"      column="NewFlag"       javaType="int"/>
+		<result  property="maker"        column="Maker"         javaType="String"/> 
+		<result  property="groupID"      column="GroupID"       javaType="String"/>
+		<result  property="exclusive"    column="Exclusive"     javaType="String"/> 
+		<result  property="smallPic"     column="SmallPic"      javaType="String"/>
+		<result  property="bigPic"       column="BigPic"        javaType="String"/>
+		<result  property="content"      column="Content"       javaType="String"/> 
+		<result  property="clickNumber"  column="ClickNumber"   javaType="int"/> 
+		<result  property="addTimeStr"   column="AddTime"       javaType="String"/>
+		<result  property="updateTimeStr"   column="UpdateTime"    javaType="String"/>
+		<result  property="sequence"     column="Sequence"      javaType="int"/>
+		<result  property="seoKeywords"  column="SeoKeywords"   javaType="String"/> 
+		<result  property="seoDescription"  column="SeoDescription" javaType="String"/>
+		<result  property="status"       column="Status"        javaType="int"/>
+   </resultMap>
+   
+     <!-- 获取产品信息总数 -->
+   <select id="queryProductCount" resultType="int" parameterType="productParam">
+     <![CDATA[
+        select count(1) from business_products t
+     ]]>
+      where 1=1 and status = 0
+      <include refid="queryForProductList"/>
+   </select>
+   <!-- 获取企业信息-分页 -->
+    <select id="queryProduct"  resultType="productInfo">
+      
+      <![CDATA[
+      SELECT
+		t.ID as productID,t.ProductName,t.ViewFlag,t.SortID,s.GroupName as groupID,t.productNo,t.productModel,
+		concat(cast(t.N_Price as char),t.Unit) as N_PriceStr,concat(cast(t.P_Price as char),t.Unit) as P_PriceStr,t.maker,t.CommendFlag,t.newFlag,t.Exclusive,t.Stock,t.ClickNumber,r.SortName as content,
+		date_format( t.addTime,'%Y-%m-%d  %H:%i:%s')  as addtimeStr,
+		date_format( t.updateTime,'%Y-%m-%d  %H:%i:%s')  as updateTimeStr
+		from  business_products t left join business_memgroup s on t.groupID = s.groupID
+		      left join business_productsort r on t.SortID = r.ID
+		      
+		       where 1=1   
+	  ]]>
+	    <include refid="queryForProductList"/>
+          
+       <![CDATA[
+	       and t.status = 0 order by  t.addTime
+	   ]]>
+   </select>
+   <!-- 查询产品列表条件 -->
+   <sql id="queryForProductList">
+	    <if test="startTime != null " >  and date_format(t.addTime,'%Y%m%d') >= #{startTime} </if>
+        <if test="endTime != null " >  <![CDATA[and  date_format( t.addTime,'%Y%m%d') <= #{endTime}  ]]></if>
+        <if test="productName != null" > and t.productName like CONCAT('%','${productName}','%' )</if>
+        <if test="productTypeID != null"> and t.sortID = ${productTypeID} </if>
+   </sql>
+   <!-- 获取产品详细信息 -->
+   <select id="queryProductInfo" resultMap="productInfoMap" parameterType="productInfo">
+     <![CDATA[
+        select t.*,s.sortName from business_products t ,business_productsort s
+     ]]>
+      where 1=1 and t.sortID = s.ID
+      <include refid="querywhereClause"/>
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+      <if test=" productID != null">
+         and t.ID = #{productID}
+      </if>
+   </sql>
+   <!-- 插入产品信息记录 -->
+   <insert id="insertProductInfo" parameterType="productInfo">
+      <![CDATA[
+         insert into business_products 
+             (ProductName,ViewFlag,SortID,SortPath,ProductNo,ProductModel,N_Price,P_Price,Stock,Unit,CommendFlag,NewFlag,Maker,GroupID,Exclusive,SmallPic,BigPic,Content,ClickNumber,AddTime,UpdateTime,Sequence,SeoKeywords,Status,SeoDescription)
+      values (#{productName},#{viewFlag},#{sortID},#{sortPath},#{productNo},#{productModel},#{N_Price},#{P_Price},#{stock},#{unit},#{commendFlag},#{newFlag},#{maker},#{groupID},#{exclusive},#{smallPic},#{bigPic},#{content},#{clickNumber},#{addTime},#{updateTime},#{sequence},#{seoKeywords},#{status},#{seoDescription})
+      ]]>
+   </insert>
+   
+   <!-- 修改企业信息 -->
+   <update id="modifyProductInfo" parameterType="productInfo">
+          update business_products set UpdateTime = #{updateTime}
+           <if test="productName != null">,ProductName = #{productName} </if>
+           <if test="viewFlag != null">,ViewFlag  = #{viewFlag}</if>
+           <if test="sortID != null">,SortID   = #{sortID}</if>
+           <if test="sortPath != null">,SortPath   = #{sortPath}</if>
+           <if test="productNo != null">,ProductNo   = #{productNo}</if>
+           <if test="productModel != null">,ProductModel   = #{productModel}</if>
+           <if test="N_Price != null">,N_Price   = #{N_Price}</if>
+           <if test="P_Price != null">,P_Price   = #{P_Price}</if>
+           <if test="stock != null">,Stock   = #{stock}</if>
+           <if test="unit != null">,Unit   = #{unit}</if>
+           <if test="commendFlag != null">,CommendFlag   = #{commendFlag}</if>
+           <if test="newFlag != null">,NewFlag   = #{newFlag}</if>
+           <if test="maker != null">,Maker   = #{maker}</if>
+           <if test="groupID != null">,GroupID     = #{groupID}</if>
+           <if test="exclusive != null">,Exclusive   = #{exclusive}</if>
+           <if test="smallPic != null">,SmallPic   = #{smallPic}</if>
+           <if test="bigPic != null">,BigPic   = #{bigPic}</if>
+           <if test="content != null">,Content   = #{content}</if>
+           <if test="clickNumber != null">,ClickNumber  = #{clickNumber} </if>
+           <if test="seoKeywords != null">,SeoKeywords   = #{seoKeywords} </if>
+           <if test="seoDescription != null">,SeoDescription   = #{seoDescription} </if>
+           <if test="sequence != null">,Sequence   = #{sequence} </if>
+           <if test="status != null">,Status   = #{status} </if>
+           where 1=1 and ID = #{productID}
+   </update>
+   <!-- 删除产品信息 -->
+   <delete id="deleteProductInfos">
+        update business_products set status = 1 where ID in 
+        <foreach item="productIds" collection="list"
+         open="(" separator="," close=")">
+         #{productIds}
+        </foreach>
+   </delete>
+</mapper>

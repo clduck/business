@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+-->
+
+<mapper namespace="com.cn.duck.model.DownloadInfo">
+  <!-- 下载信息 -->
+   <resultMap id="downloadInfoMap" type="downloadInfo" >
+        <result  property="downloadID"    column="ID"            javaType="int"/>
+		<result  property="downloadName"  column="DownName"   javaType="String"/> 
+		<result  property="viewFlag"     column="ViewFlag"         javaType="int"/>
+		<result  property="sortID"       column="SortID"          javaType="int"/>
+		<result  property="sortPath"     column="SortPath"       javaType="String"/>
+		<result  property="filesize"    column="Filesize"        javaType="String"/>
+		<result  property="fileUrl"     column="FileUrl"        javaType="String"/>
+		<result  property="commendFlag"      column="CommendFlag"       javaType="int"/> 
+		<result  property="groupID"      column="GroupID"       javaType="String"/>
+		<result  property="exclusive"        column="Exclusive"         javaType="int"/> 
+		<result  property="content"         column="content"          javaType="String"/>
+		<result  property="clickNumber"  column="ClickNumber"   javaType="int"/> 
+		<result  property="addTimeStr"      column="AddTime"       javaType="String"/>
+		<result  property="updateTimeStr"        column="UpdateTime"         javaType="String"/>
+		<result  property="seoKeywords"  column="SeoKeywords"   javaType="String"/> 
+		<result  property="seoDescription"  column="SeoDescription" javaType="String"/> 
+		
+   </resultMap>
+   
+     <!-- 获取下载信息总数 -->
+   <select id="queryDownloadCount" resultType="int" parameterType="downloadParam">
+     <![CDATA[
+        select count(1) from business_download t
+     ]]>
+      where 1=1 
+      <include refid="queryForDownloadList"/>
+   </select>
+   <!-- 获取企业信息-分页 -->
+    <select id="queryDownload"  resultType="downloadInfo" parameterType="downloadParam">
+      
+      <![CDATA[
+      SELECT
+		t.ID as downloadID,t.DownName as downloadName,t.ViewFlag,t.SortID,s.GroupName as groupID,
+		t.CommendFlag,t.Exclusive,t.ClickNumber,r.SortName as content,
+		date_format( t.addTime,'%Y-%m-%d  %H:%i:%s')  as addtimeStr,
+		date_format( t.updateTime,'%Y-%m-%d  %H:%i:%s')  as updateTimeStr
+		from  business_download t left join business_memgroup s on t.groupID = s.groupID
+		      left join business_downsort r on t.SortID = r.ID
+		      
+		       where 1=1   
+	  ]]>
+	    <include refid="queryForDownloadList"/>
+          
+       <![CDATA[
+	         order by  t.addTime
+	   ]]>
+   </select>
+   <!-- 查询下载列表条件 -->
+   <sql id="queryForDownloadList">
+	    <if test="startTime != null " >  and date_format(t.addTime,'%Y%m%d') >= #{startTime} </if>
+        <if test="endTime != null " >  <![CDATA[and  date_format( t.addTime,'%Y%m%d') <= #{endTime}  ]]></if>
+        <if test="downloadName != null" > and t.downName like CONCAT('%','${downloadName}','%' )</if>
+        <if test="downloadTypeID != null"> and t.sortID = ${downloadTypeID} </if>
+   </sql>
+   <!-- 获取下载详细信息 -->
+   <select id="queryDownloadInfo" resultMap="downloadInfoMap" parameterType="downloadInfo">
+     <![CDATA[
+        select t.*,s.sortName from business_download t ,business_downsort s
+     ]]>
+      where 1=1 and t.sortID = s.ID
+      <include refid="querywhereClause"/>
+   </select>
+   <!-- 查询条件 -->
+   <sql id="querywhereClause">
+      <if test=" downloadID != null">
+         and t.ID = #{downloadID}
+      </if>
+   </sql>
+   <!-- 插入下载信息记录 -->
+   <insert id="insertDownloadInfo" parameterType="downloadInfo">
+      <![CDATA[
+         insert into business_download 
+             (DownName,ViewFlag,SortID,SortPath,Filesize,FileUrl,CommendFlag,GroupID,Exclusive,Content,ClickNumber,AddTime,UpdateTime,SeoKeywords,SeoDescription)
+      values (#{downloadName},#{viewFlag},#{sortID},#{sortPath},#{filesize},#{fileUrl},#{commendFlag},#{groupID},#{exclusive},#{content},#{clickNumber},#{addTime},#{updateTime},#{seoKeywords},#{seoDescription})
+      ]]>
+   </insert>
+   
+   <!-- 修改企业信息 -->
+   <update id="modifyDownloadInfo" parameterType="downloadInfo">
+          update business_download set UpdateTime = #{updateTime}
+           <if test="downloadName != null">,DownName = #{downloadName} </if>
+           <if test="viewFlag != null">,ViewFlag  = #{viewFlag}</if>
+           <if test="sortID != null">,SortID   = #{sortID}</if>
+           <if test="sortPath != null">,SortPath   = #{sortPath}</if>
+           <if test="filesize != null">,Filesize   = #{filesize}</if>
+           <if test="fileUrl != null">,FileUrl   = #{fileUrl}</if>
+           <if test="commendFlag != null">,CommendFlag   = #{commendFlag}</if>
+           <if test="groupID != null">,GroupID     = #{groupID}</if>
+           <if test="exclusive != null">,Exclusive   = #{exclusive}</if>
+           <if test="content != null">,Content   = #{content}</if>
+           <if test="clickNumber != null">,ClickNumber  = #{clickNumber} </if>
+           <if test="seoKeywords != null">,SeoKeywords   = #{seoKeywords} </if>
+           <if test="seoDescription != null">,SeoDescription   = #{seoDescription} </if>
+           where 1=1 and ID = #{downloadID}
+   </update>
+   <!-- 删除下载信息 -->
+   <delete id="deleteDownloadInfos">
+        delete from business_download where ID in 
+        <foreach item="downloadIds" collection="list"
+         open="(" separator="," close=")">
+         #{downloadIds}
+        </foreach>
+   </delete>
+</mapper>
