@@ -6,8 +6,8 @@
 
 	<!-- 查询用户信息 -->
 	<resultMap id="AboutInfoMap" type="AboutInfo">
-	    <result property="ID" column="ID" />
-		<result property="aboutID" column="ID" />
+	    <result property="seqId" column="seq_id" />
+		<result property="seqId" column="seq_id" />
 		<result property="aboutName" column="AboutNameCh" />
 		<result property="viewFlag" column="ViewFlagCh" />
 		<result property="content" column="ContentCh" />
@@ -49,8 +49,8 @@
 			update business_about
 			<include refid="updateData_set"/>
 			<where>
-				<if test="AboutInfo.ID != null">
-					ID = #{AboutInfo.ID}
+				<if test="AboutInfo.seqId != null">
+					seq_id = #{AboutInfo.seqId}
 				</if>
 			</where>
 		</foreach>
@@ -58,7 +58,7 @@
 
    <!-- 删除下载信息 -->
    <delete id="deleteAboutinfos">
-        delete from business_about where ID in 
+        delete from business_about where seq_id in 
         <foreach item="aboutInfoIds" collection="list"
          open="(" separator="," close=")">
          #{aboutInfoIds}
@@ -69,7 +69,7 @@
 
 	<!-- 根据主键删除 -->
 	<delete id="deletePK" parameterType="int">
-		delete from business_about where ID = #{pk}
+		delete from business_about where seq_id = #{pk}
 	</delete>
 
 	<!-- 根据参数删除 -->
@@ -80,7 +80,7 @@
 
 	<!-- 批量删除 -->
 	<delete id="deleteBatch">
-		delete from business_about where ID in
+		delete from business_about where seq_id in
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<foreach collection="list" item="pk" index="index" separator=",">
 				#{pk}
@@ -145,7 +145,7 @@
 	
 	<!-- 查询（序列号） -->
 	<select id="selectPk" parameterType="int" resultMap="AboutInfoMap">
-		select * from business_about where 1 = 1 and ID = #{pk}
+		select * from business_about where 1 = 1 and seq_id = #{pk}
 	</select>
 
     <!-- 插入数据列名 -->
@@ -189,8 +189,8 @@
     <sql id="updateData_where">
     	<where>
     		<trim suffix="" suffixOverrides=",">
-				<if test="conditions.aboutID != null">
-					ID = #{conditions.aboutID}
+				<if test="conditions.seqId != null">
+					seq_id = #{conditions.seqId}
 				</if>
 				<if test="conditions.updateTime != null">
 					and UpdateTime = #{conditions.updateTime}
@@ -229,8 +229,8 @@
     <sql id="deleteData_where">
     	<where>
     		<trim suffix="" suffixOverrides=",">
-				<if test="conditions.aboutID != null">
-					ID = #{conditions.aboutID}
+				<if test="conditions.seqId != null">
+					seq_id = #{conditions.seqId}
 				</if>
 				<if test="conditions.updateTime != null">
 					and UpdateTime = #{conditions.updateTime}
@@ -270,8 +270,8 @@
     	<where>
     		<trim suffix="" suffixOverrides=",">
     			<if test="conditions!= null">
-					<if test="conditions.aboutID != null">
-						ID = #{conditions.aboutID}
+					<if test="conditions.seqId != null">
+						seq_id = #{conditions.seqId}
 					</if>
 					<if test="conditions.updateTime != null">
 						and UpdateTime = #{conditions.updateTime}
