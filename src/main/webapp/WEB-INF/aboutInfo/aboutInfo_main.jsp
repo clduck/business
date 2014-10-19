@@ -63,7 +63,7 @@
 	  $.fn.zTree.init($("#tree-1"), {}, nodes1);
 	  grid = $("#maingrid").quiGrid({
        columns: [ 
-	                { display: '企业ID', name: 'aboutID',     align: 'left', width: "20%"},
+	                { display: '企业ID', name: 'seqId',     align: 'left', width: "20%"},
 	                { display: '企业名称', name: 'aboutName',      align: 'left', width: "20%"},
 	                { display: '部门', name: 'deptName', align: 'left', width: "20%", isSort:false},
 	                { display: '学历', name: 'degree',   align: 'left', width: "20%" },
@@ -71,15 +71,15 @@
 						 //操作列渲染为图标
 						 render: function (rowdata, rowindex, value, column){
 	                 	    return '<div class="padding_top4 padding_left5">'
-	                                 + '<span class="img_view hand" title="查看" onclick="onView(' + rowdata.id + ')"></span>'
-	                                 + '<span class="img_edit hand" title="修改" onclick="onEdit(' + rowdata.id + ')"></span>' 
-	                                 + '<span class="img_delete hand" title="删除" onclick="onDelete(' + rowdata.id+','+rowindex + ')"></span>'
+	                                 + '<span class="img_view hand" title="查看" onclick="onView(' + rowdata.seqId+','+rowindex + ')"></span>'
+	                                 + '<span class="img_edit hand" title="修改" onclick="onEdit(' + rowdata.seqId+','+rowindex + ')"></span>' 
+	                                 + '<span class="img_delete hand" title="删除" onclick="onDelete(' + rowdata.seqId+','+rowindex + ')"></span>'
 	                             + '</div>';
 		                 }
 		            }
          ], 
         url: path+'/aboutInfo/getPages.xhtml', 
-        sortName: 'aboutID',
+        sortName: 'seqId',
         rownumbers:true,
         checkbox:true,
         height: '100%', 
@@ -91,7 +91,7 @@
 			items: [
                 { text: '新增', click: onAdd, iconClass: 'icon_add' },
                 { line: true },
-                { text: '批量删除', click: deleteUser, iconClass: 'icon_delete' },
+                { text: '批量删除', click: onDeleteBacth, iconClass: 'icon_delete' },
                 { line: true },
                 { text: '导入', click: importUser, iconClass: 'icon_import' },
                 { line: true },
@@ -107,7 +107,7 @@
 			if(event.keyCode==13){
 				searchHandler();
 			}
-		})
+		});
 	}
 	
 	
@@ -141,10 +141,7 @@
 		diag.show();
 	}
 	
-	//批量删除
-	function deleteUser() {
-		top.Dialog.alert("向后台发送ajax请求来批量删除。见JAVA版或.NET版演示。");
-	}
+
 	
 	//导入
 	function importUser() {
@@ -161,13 +158,13 @@
 	}
 	
 	//查看
-	function onView(rowid){
+	function onView(rowid,rowidx){
 		alert("选择的记录Id是:" + rowid );
 		top.Dialog.open({URL:path+"/sample_html/layout/user-management-content2.html",Title:"查看",Width:500,Height:330}); 
 	}
 	
 	//修改
-	function onEdit(rowid){
+	function onEdit(rowid,rowidx){
 		var diag = new top.Dialog();
 		diag.Title = "编辑";
 // 		diag.ShowMaxButton=true;
@@ -176,8 +173,13 @@
 		diag.Height=400;
 		diag.OKEvent = function(){
 			var modelObj = diag.innerFrame.contentWindow.beforeAjaxHander();
+// 			modelObj.conditions = {};
+// 			modelObj.conditions.seqId = rowid;
+// 			alert(JSON.stringify(modelObj));
+// 			return false;
 			if(modelObj){
-				$.post(path+"/aboutInfo/saveAboutInfo.xhtml",
+				modelObj.push({name:'conditions.seqId', value:rowid });
+				$.post(path+"/aboutInfo/modifyAboutInfo.xhtml",
 						modelObj,
 						function(result){
 							 top.Dialog.alert(result.msg);
@@ -192,7 +194,7 @@
 // 			alert("点击了取消");
 			diag.close();
 			};
-		diag.URL = path+"/aboutInfo/edit.xhtml?rowid="+rowid;
+		diag.URL = path+"/aboutInfo/edit.xhtml?id="+rowid+"&rowidx="+rowidx;
 		diag.ShowButtonRow=true;
 		diag.show();
 	}
@@ -200,12 +202,44 @@
 	//删除
 	function onDelete(rowid,rowidx){
 		top.Dialog.confirm("确定要删除该记录吗？",function(){
-		  	top.Dialog.alert("向后台发送ajax请求来删除。见JAVA版或.NET版演示。");
+// 		  	top.Dialog.alert("向后台发送ajax请求来删除。见JAVA版或.NET版演示。");
+            var modelObj = [];
+            modelObj.push({name:'conditions.seqId',value:rowid});
+			$.post(path+"/aboutInfo/deleteAboutInfo.xhtml",
+					modelObj,
+					function(result){
+						 top.Dialog.alert(result.msg);
+						 grid.loadData();//加载数据
+					},"json");
 		});
+	}
+	//批量删除
+	function onDeleteBacth() {
+// 		top.Dialog.alert("向后台发送ajax请求来批量删除。见JAVA版或.NET版演示。");
+		var rowDataArr = grid.getCheckedRows();
+		if(rowDataArr == null || rowDataArr == 'null'){
+	    	top.Dialog.alert("请选择要删除的记录！");
+		}else{
+// 			alert(JSON.stringify(rowDataArr));
+            var ids = [];
+            for(var i = 0; i < rowDataArr.length; i++){
+            	ids.push(rowDataArr[i].seqId);
+            }
+            var modelObj = [];
+            modelObj.push({name:'conditions.ids',value:ids});
+			$.post(path+'/aboutInfo/deleteAboutInfoBacth.xhtml',
+					modelObj,
+					function(result){
+						 top.Dialog.alert(result.msg);
+						 grid.loadData();//加载数据
+					},"json");
+		}
+		
+		
 	}
 	
 	function customHeightSet(contentHeight){
-		$(".cusBoxContent").height(contentHeight-55)
+		$(".cusBoxContent").height(contentHeight-55);
 	}
 	//查询
 	function searchHandler(){
@@ -218,8 +252,8 @@
 	    grid.loadData();//加载数据
 	}
 	//获取行数据
-	function getRowData(rowid){
-		var rowData = grid.getRow(rowid);
+	function getRowData(rowidx){
+		var rowData = grid.getRow(rowidx);
 		return rowData;
 	}
 

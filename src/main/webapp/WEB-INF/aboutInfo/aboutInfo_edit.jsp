@@ -22,7 +22,8 @@
 		<tr>
 			<td width="15%">企业名称：</td>
 			<td>
-				<input type="text" name="aboutName" id="aboutName" class="validate[required]" /><span class="star">*</span>
+				<input type="text" name="aboutName" id="aboutName" value="${aboutInfo.aboutName }" class="validate[required]" /><span class="star">*</span>
+				<input type="hidden" name="seqId" id="seqId" value="${aboutInfo.seqId }" />
 			</td>
 		    <td width="15%">是否显示：</td>
 			<td>
@@ -45,7 +46,7 @@
 		<tr>
 			<td>公司简介：</td>
 			<td colspan="3" >
-				<textarea id="content" name="content" watermark="请填写公司简介" maxNum="150" style="width:600px;height:100px;"></textarea>
+				<textarea id="content" name="content" watermark="请填写公司简介" maxNum="150" style="width:600px;height:100px;">${aboutInfo.content }</textarea>
 			</td>
 		</tr>
 	 </table>
@@ -56,11 +57,14 @@
 
 <script type="text/javascript">
 
-  	$(function(){
-  		var rowid = ${rowid};
-  		var rowData = getParent().getRowData(rowid);
-  		alert(JSON.stringify(rowData));
-  	});
+	//表单验证
+	function beforeAjaxHander(){
+		var valid = $("#editFrom").validationEngine({returnIsValid: true});
+		if(valid){
+			var modelObj = $("#editFrom").formToArray(); 
+			return modelObj;
+		}
+	}
 </script>
 
 </body>

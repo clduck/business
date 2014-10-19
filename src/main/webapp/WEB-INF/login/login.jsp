@@ -107,7 +107,6 @@
 					  if(result.code == 0){
 					  	  $(".login_info").html("&nbsp;&nbsp;登录成功，正在转到主页...");
 					  	  var url = '<%=path%>'+result.retobj;
-					  	  alert(url);
 						  window.location=url;  
 					  }
 					  else{
