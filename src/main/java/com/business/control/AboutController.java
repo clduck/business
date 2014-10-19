@@ -1,10 +1,8 @@
 package com.business.control;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +14,6 @@ import net.sf.json.JSONArray;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,8 +29,6 @@ import com.business.mgr.adminMgr.MemGroupDao;
 import com.business.model.AboutInfo;
 import com.business.model.common.RetMsg;
 import com.business.service.IAboutInfoService;
-import com.business.util.DateUtils;
-import com.business.util.common.ConstConfig;
 import com.business.util.page.PageEntity;
 import com.business.util.page.PagingResult;
 import com.business.util.property.MyDateEditor;
@@ -84,17 +79,27 @@ public class AboutController {
 	public ModelAndView edit(HttpServletRequest request, HttpServletResponse response,ModelMap modelMap) {
 		logger.info("=========初始化编辑界面=========");
 		String outpath = "/" + PROJECT_MODEL + "/aboutInfo_edit";
+		String id = request.getParameter("id");
+		AboutInfo aboutInfo = null;
+		try {
+			aboutInfo = aboutInfoService.getObject(Long.parseLong(id));
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Map<String ,Object> requestMap = request.getParameterMap();
 		for (String key : requestMap.keySet()) {
 			modelMap.put(key,  ((String[])requestMap.get(key))[0]);
 		}
+		modelMap.put("aboutInfo",aboutInfo);
 		return new ModelAndView(outpath, modelMap);
 	}
 	@ResponseBody
 	@RequestMapping(value = "/getPages")
 	public Map<String, Object> getPages(HttpServletRequest request,HttpServletResponse response,AboutInfo param) {
 		
-		logger.info("=========获取企业信息=========");
+		logger.info("=========获取=========");
 		String pageNo = request.getParameter("pager.pageNo");
 		String pageSize = request.getParameter("pager.pageSize");
 		
@@ -110,7 +115,7 @@ public class AboutController {
 			pager.setT(param);
 			abouts = aboutInfoService.getPages(pager);
 		} catch (Exception e) {
-			logger.error("获取企业信息异常："+e.getMessage());
+			logger.error("获取异常："+e.getMessage());
 		}
 		
 		HashMap<String, Object>  results  = new HashMap<String, Object>();
@@ -126,14 +131,14 @@ public class AboutController {
 	 * 
 	 *  @time : 2012-1-28 
 	 *  @author :cl
-	 *  @description : 添加企业信息
+	 *  @description : 添加
 	 *  @return : void
 	 *
 	 */
 	@RequestMapping(value="saveAboutInfo", method = RequestMethod.POST)
 	public ResponseEntity<RetMsg> saveAboutInfo(HttpServletRequest request,HttpServletResponse response,AboutInfo param){
-		logger.info("=============添加企业信息=============");
-		logger.info("企业信息参数 =========aboutInfoParam : "  + param);
+		logger.info("=============添加=============");
+		logger.info("参数 =========aboutInfoParam : "  + param);
 		RetMsg ret = new RetMsg();
 		try {
 //			 param.setAddTime(DateUtils.strFormateDate(DateUtils.dateFormatStr(new Date(), ConstConfig.DATE_FULL_FORMAT),ConstConfig.DATE_FULL_FORMAT));
@@ -159,62 +164,75 @@ public class AboutController {
 	 * 
 	 *  @time : 2012-1-28 
 	 *  @author :cl
-	 *  @description : 修改企业信息
+	 *  @description : 修改
 	 *  @return : ModelAndView
 	 *
 	 */
-	@RequestMapping(value="/admin/aboutInfo.do",params="method=modifyAboutInfo")
-	public void modifyAboutInfo(HttpServletRequest request,HttpServletResponse response,AboutInfo aboutInfoParam){
-		logger.info("=============修改企业信息=============");
-		logger.info("企业信息参数 =========aboutInfoParam : "  + aboutInfoParam);
-		boolean flag = false;
+	@RequestMapping(value="modifyAboutInfo",method = RequestMethod.POST)
+	public ResponseEntity<RetMsg> modifyAboutInfo(HttpServletRequest request,HttpServletResponse response,AboutInfo aboutInfoParam){
+		logger.info("=============修改=============");
+		logger.info("参数 =========aboutInfoParam : "  + aboutInfoParam);
+		RetMsg ret = new RetMsg();
 		try {
-			aboutInfoParam.setUpdateTime(DateUtils.strFormateDate(DateUtils.dateFormatStr(new Date(), ConstConfig.DATE_FULL_FORMAT),ConstConfig.DATE_FULL_FORMAT));
+//			aboutInfoParam.setUpdateTime(DateUtils.strFormateDate(DateUtils.dateFormatStr(new Date(), ConstConfig.DATE_FULL_FORMAT),ConstConfig.DATE_FULL_FORMAT));
 		    aboutInfoService.modifyObject(aboutInfoParam);
-		    flag = true;
-		    
+            ret.setCode(0);
+            ret.setMsg("修改成功！");
 		} catch (Exception e) {
-			logger.error("修改企业信息失败: " + e.getMessage());
-		}
-		try {
-			response.getWriter().print(flag);
-		} catch (IOException e) {
+			logger.error("修改失败: " + e.getMessage());
 			e.printStackTrace();
+			ret.setCode(-1);
+			ret.setMsg("修改失败：" + e.getMessage());
 		}
+		return new ResponseEntity<RetMsg>( ret ,HttpStatus.OK);
 	}
 	/**
 	 * 
 	 *  @time : 2012-1-30 
 	 *  @author :cl
-	 *  @description : 删除企业信息
+	 *  @description : 删除
 	 *  @return : void
 	 *
 	 */
-	@RequestMapping(value="/admin/aboutInfo.do",params="method=deleteAboutInfo")
-	public void deleteAboutInfo(HttpServletRequest request, HttpServletResponse response){
-		logger.info("=============删除企业信息=============");
-		boolean flag = false;
-		String json = request.getParameter("aboutInfoParams");
-		logger.info("========参数aboutInfoParams :" + json);
-		JSONArray jsonArray = JSONArray.fromObject(json);
-		List<AboutInfo> aboutInfoParams =  (List<AboutInfo>) JSONArray.toCollection(jsonArray, AboutInfo.class);
-		List<Long> Ids = new ArrayList<Long>();
-		for (int i = 0; i < aboutInfoParams.size(); i++) {
-			Ids.add(Long.parseLong(aboutInfoParams.get(i).getAboutID().toString()));
-		}
+	@RequestMapping(value="deleteAboutInfoBacth",method = RequestMethod.POST)
+	public ResponseEntity<RetMsg> deleteAboutInfoBacth(HttpServletRequest request, HttpServletResponse response,AboutInfo aboutInfoParams){
+		logger.info("=============批量删除=============");
+		RetMsg ret = new RetMsg();
+		List<Long> ids = aboutInfoParams.getConditions().getIds();
 		try {
-			aboutInfoService.deleteBatch(Ids);
-			flag = true;
+			aboutInfoService.deleteBatch(ids);
+			ret.setCode(0);
+			ret.setMsg("删除成功！");
 		} catch (Exception e) {
-			logger.error("========删除企业信息失败=========" + e.getMessage());
+			ret.setCode(-1);
+			ret.setMsg("批量删除失败:" + e.getMessage());
+			logger.error("========批量删除失败=========" + e.getMessage());
 		}
-		try {
-			response.getWriter().print(flag);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return new ResponseEntity<RetMsg>(ret,HttpStatus.OK);
 	}
-	
+	/**
+	 * 
+	 *  @time : 2012-1-30 
+	 *  @author :cl
+	 *  @description : 删除
+	 *  @return : void
+	 *
+	 */
+	@RequestMapping(value="deleteAboutInfo",method = RequestMethod.POST)
+	public ResponseEntity<RetMsg> deleteAboutInfo(HttpServletRequest request, HttpServletResponse response,AboutInfo param){
+		logger.info("=============删除=============");
+		RetMsg ret = new RetMsg();
+		try {
+			aboutInfoService.deleteObject(param);
+			ret.setCode(0);
+			ret.setMsg("删除成功！");
+		} catch (Exception e) {
+			ret.setCode(-1);
+			ret.setMsg("删除失败:" + e.getMessage());
+			logger.error("========删除失败=========" + e.getMessage());
+		}
+		return new ResponseEntity<RetMsg>(ret,HttpStatus.OK);
+	}
 	@InitBinder
 	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder){
 		binder.registerCustomEditor(Date.class, new MyDateEditor());

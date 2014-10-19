@@ -18,7 +18,36 @@ public class AboutInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer ID;
+	//属性begin
+	/*
+	 *  
+	 */
+	private java.lang.Long seqId;
+	/*
+	 * 创建时间 
+	 */
+	private java.util.Date createTime;
+	/*
+	 * 创建人 
+	 */
+	private java.lang.Long createUserId;
+	/*
+	 * 更新时间 
+	 */
+	private java.util.Date updateTime;
+	/*
+	 * 更新人 
+	 */
+	private java.lang.Long updateUserId;
+	/*
+	 * 排序 
+	 */
+	private java.lang.Integer dataOrder;
+	/*
+	 * 1正常2删除 
+	 */
+	private java.lang.Integer isDel;
+	
 	private Integer aboutID;
 	private String aboutName;
 	private Integer viewFlag;
@@ -29,7 +58,6 @@ public class AboutInfo implements Serializable {
 	private String exclusive;
 	private Integer childFlag;
 	private Date addTime = new Date();
-	private Date updateTime = new Date();
 	private Integer parentID;
 	private String sortPath;
 	private Integer status;
@@ -154,13 +182,54 @@ public class AboutInfo implements Serializable {
 	public void setConditions(AboutInfoParam conditions) {
 		this.conditions = conditions;
 	}
+	
 
-	public Integer getID() {
-		return ID;
+	public java.lang.Long getSeqId() {
+		return seqId;
 	}
 
-	public void setID(Integer iD) {
-		ID = iD;
+	public void setSeqId(java.lang.Long seqId) {
+		this.seqId = seqId;
+	}
+
+	public java.util.Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(java.util.Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public java.lang.Long getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(java.lang.Long createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public java.lang.Long getUpdateUserId() {
+		return updateUserId;
+	}
+
+	public void setUpdateUserId(java.lang.Long updateUserId) {
+		this.updateUserId = updateUserId;
+	}
+
+	public java.lang.Integer getDataOrder() {
+		return dataOrder;
+	}
+
+	public void setDataOrder(java.lang.Integer dataOrder) {
+		this.dataOrder = dataOrder;
+	}
+
+	public java.lang.Integer getIsDel() {
+		return isDel;
+	}
+
+	public void setIsDel(java.lang.Integer isDel) {
+		this.isDel = isDel;
 	}
 
 	@Override

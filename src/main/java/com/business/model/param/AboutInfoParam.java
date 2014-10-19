@@ -1,6 +1,7 @@
 package com.business.model.param;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * aboutInfo 参数类
@@ -14,7 +15,7 @@ public class AboutInfoParam {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer ID;
+	private java.lang.Long seqId;
 	private Integer aboutID;
 	private String aboutName;
 	private Integer viewFlag;
@@ -31,6 +32,7 @@ public class AboutInfoParam {
 	private Integer status;
 	private String orderColumn;
 	private String orderTurn;
+	private List<Long> ids;
 
 	public Integer getViewFlag() {
 		return viewFlag;
@@ -129,12 +131,12 @@ public class AboutInfoParam {
 		this.status = status;
 	}
 
-	public Integer getID() {
-		return ID;
+	public java.lang.Long getSeqId() {
+		return seqId;
 	}
 
-	public void setID(Integer iD) {
-		ID = iD;
+	public void setSeqId(java.lang.Long seqId) {
+		this.seqId = seqId;
 	}
 
 	public Integer getAboutID() {
@@ -167,6 +169,14 @@ public class AboutInfoParam {
 
 	public void setOrderTurn(String orderTurn) {
 		this.orderTurn = orderTurn;
+	}
+
+	public List<Long> getIds() {
+		return ids;
+	}
+
+	public void setIds(List<Long> ids) {
+		this.ids = ids;
 	}
 	
 }
